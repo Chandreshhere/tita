@@ -1,7 +1,13 @@
 "use client";
 import "./home.css";
+import { useGSAP } from "@gsap/react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 import FeaturedWork from "@/components/FeaturedWork/FeaturedWork";
+import ProcessCards from "@/components/ProcessCards/ProcessCards";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function Home() {
   return (
@@ -37,6 +43,8 @@ export default function Home() {
       </section>
 
       <FeaturedWork />
+
+      <ProcessCards />
     </>
   );
 }
