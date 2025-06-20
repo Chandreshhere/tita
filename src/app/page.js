@@ -6,6 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 import FeaturedWork from "@/components/FeaturedWork/FeaturedWork";
 import ProcessCards from "@/components/ProcessCards/ProcessCards";
+import WhoWeAre from "@/components/WhoWeAre/WhoWeAre";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -45,6 +46,38 @@ export default function Home() {
       <FeaturedWork />
 
       <ProcessCards />
+
+      <WhoWeAre />
+
+      <section className="hero">
+        <div className="hero-img">
+          <img src="/images/home/hero-img.jpg" alt="" />
+        </div>
+
+        <div className="hero-temp-nav">
+          <p className="caps light" id="logo">
+            Wu Wei
+          </p>
+          <p className="caps sm light">Menu</p>
+        </div>
+
+        <div className="hero-keywords">
+          <p className="caps sm light">Purpose</p>
+          <p className="caps sm light">Balance</p>
+          <p className="caps sm light">Structure</p>
+          <p className="caps sm light">Expression</p>
+        </div>
+
+        <div className="hero-footer">
+          <h3 className="light">
+            We craft digital experiences with intention, balancing clarity,
+            creativity, and code to build websites that feel as effortless as
+            they are powerful.
+          </h3>
+
+          <p className="caps sm light">( Scroll down )</p>
+        </div>
+      </section>
     </>
   );
 }
