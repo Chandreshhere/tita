@@ -58,7 +58,7 @@ export const portfolio = [
         img: "/images/work/work_010.jpeg",
       },
       {
-        name: "F L O R A",
+        name: "FLORA",
         tags: "typography, design",
         img: "/images/work/work_011.jpeg",
       },
@@ -131,6 +131,76 @@ export const portfolio = [
         name: "NEON SYSTEM 3",
         tags: "typography, design",
         img: "/images/work/work_023.jpeg",
+      },
+    ],
+  },
+  {
+    year: "2021",
+    projects: [
+      {
+        name: "Matrix+01",
+        tags: "motion, design",
+        img: "/images/work/work_024.jpeg",
+      },
+      {
+        name: "Featherlight",
+        tags: "creative direction, design",
+        img: "/images/work/work_025.jpeg",
+      },
+      {
+        name: "Quiet Rush",
+        tags: "typography, design",
+        img: "/images/work/work_001.jpeg",
+      },
+      {
+        name: "DriftState",
+        tags: "web, creative direction",
+        img: "/images/work/work_002.jpeg",
+      },
+      {
+        name: "Signal Cut 4",
+        tags: "motion, experimental",
+        img: "/images/work/work_003.jpeg",
+      },
+    ],
+  },
+  {
+    year: "2020",
+    projects: [
+      {
+        name: "Tension Loop",
+        tags: "art direction, identity",
+        img: "/images/work/work_004.jpeg",
+      },
+      {
+        name: "Object 1A",
+        tags: "creative direction, design",
+        img: "/images/work/work_005.jpeg",
+      },
+    ],
+  },
+  {
+    year: "2019",
+    projects: [
+      {
+        name: "Mono Flower",
+        tags: "art direction, design",
+        img: "/images/work/work_006.jpeg",
+      },
+      {
+        name: "Void / Dust",
+        tags: "web, creative direction",
+        img: "/images/work/work_007.jpeg",
+      },
+      {
+        name: "ZigZag Dream",
+        tags: "motion, design",
+        img: "/images/work/work_008.jpeg",
+      },
+      {
+        name: "SN4KE",
+        tags: "experimental, identity",
+        img: "/images/work/work_009.jpeg",
       },
     ],
   },
