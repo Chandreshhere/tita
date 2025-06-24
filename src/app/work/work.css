@@ -20,9 +20,10 @@
 
 .work-year {
   position: relative;
-  top: 5rem;
+  top: 8rem;
   left: -7rem;
   transform: translateY(0%);
+  will-change: transform;
 }
 
 .work-projects-container {
