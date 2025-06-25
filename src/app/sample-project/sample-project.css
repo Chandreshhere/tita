@@ -1,6 +1,6 @@
 .sample-project {
-  background-color: #141414;
-  color: #fff;
+  background-color: var(--background);
+  color: var(--foreground);
 }
 
 .sp-hero {
@@ -103,7 +103,7 @@
 }
 
 .sp-next-project-copy p {
-  opacity: 0.3;
+  color: var(--foreground-200);
 }
 
 .sp-next-project-names {

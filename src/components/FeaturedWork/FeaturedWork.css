@@ -6,6 +6,7 @@
   justify-content: center;
   align-items: center;
   gap: 4rem;
+  background-color: var(--background);
 }
 
 .featured-work-container .featured-work {

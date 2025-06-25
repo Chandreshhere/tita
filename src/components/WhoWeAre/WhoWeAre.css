@@ -35,6 +35,7 @@
 .whoweare .whoweare-header h1 {
   text-transform: uppercase;
   font-size: 55vw;
+  color: var(--foreground);
 }
 
 .whoweare-img {
