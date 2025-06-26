@@ -11,8 +11,10 @@ const Archive = () => {
   useEffect(() => {
     const gallery = galleryRef.current;
     const dragLayer = dragLayerRef.current;
-    const totalRows = 20;
-    const imagesPerRow = 60;
+
+    const isMobile = window.innerWidth < 1000;
+    const totalRows = isMobile ? 15 : 20;
+    const imagesPerRow = isMobile ? 25 : 60;
     const totalImages = totalRows * imagesPerRow;
     const images = [];
 
@@ -23,7 +25,14 @@ const Archive = () => {
     for (let i = 0; i < totalImages; i++) {
       const img = document.createElement("div");
       img.className = "img";
-      img.style.height = `${getRandomHeight(30, 40)}px`;
+
+      if (isMobile) {
+        img.style.height = `${getRandomHeight(60, 80)}px`;
+        img.style.width = `calc((100% - ${25 * 4}px) / 25)`;
+      } else {
+        img.style.height = `${getRandomHeight(30, 40)}px`;
+        img.style.width = `calc((100% - 236px) / 60)`;
+      }
 
       const imgElement = document.createElement("img");
       const randomImageNumber = Math.floor(Math.random() * 50) + 1;
@@ -40,7 +49,7 @@ const Archive = () => {
       opacity: 1,
       duration: 0.5,
       stagger: {
-        amount: 1.5,
+        amount: isMobile ? 1.2 : 1.5,
         grid: [totalRows, imagesPerRow],
         from: "random",
       },
@@ -60,10 +69,14 @@ const Archive = () => {
         const distX = (rect.left + rect.width / 2 - centerX) / 100;
         const distY = (rect.top + rect.height / 2 - centerY) / 100;
 
+        const zoomScale = isMobile ? 3 : 5;
+        const zoomDistX = isMobile ? 800 : 1200;
+        const zoomDistY = isMobile ? 400 : 600;
+
         gsap.to(img, {
-          x: distX * 1200,
-          y: distY * 600,
-          scale: 5,
+          x: distX * zoomDistX,
+          y: distY * zoomDistY,
+          scale: zoomScale,
           duration: 2.5,
           ease: "power4.inOut",
         });
@@ -102,6 +115,7 @@ const Archive = () => {
     animate();
 
     function handleDragStart(e) {
+      e.preventDefault();
       isDragging = true;
       dragLayer.classList.add("active");
 
@@ -129,6 +143,8 @@ const Archive = () => {
         });
         document.addEventListener("touchend", handleDragEnd);
       }
+
+      document.body.style.overflow = "hidden";
     }
 
     function handleDragMove(e) {
@@ -155,10 +171,14 @@ const Archive = () => {
       document.removeEventListener("touchmove", handleDragMove);
       document.removeEventListener("mouseup", handleDragEnd);
       document.removeEventListener("touchend", handleDragEnd);
+
+      document.body.style.overflow = "";
     }
 
     dragLayer.addEventListener("mousedown", handleDragStart);
-    dragLayer.addEventListener("touchstart", handleDragStart);
+    dragLayer.addEventListener("touchstart", handleDragStart, {
+      passive: false,
+    });
 
     return () => {
       dragLayer.removeEventListener("mousedown", handleDragStart);
@@ -167,6 +187,8 @@ const Archive = () => {
       if (gallery) {
         gallery.innerHTML = "";
       }
+
+      document.body.style.overflow = "";
     };
   }, []);
 
