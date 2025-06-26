@@ -14,7 +14,7 @@ const Archive = () => {
 
     const isMobile = window.innerWidth < 1000;
     const totalRows = isMobile ? 15 : 20;
-    const imagesPerRow = isMobile ? 25 : 60;
+    const imagesPerRow = isMobile ? 30 : 60;
     const totalImages = totalRows * imagesPerRow;
     const images = [];
 
@@ -27,8 +27,8 @@ const Archive = () => {
       img.className = "img";
 
       if (isMobile) {
-        img.style.height = `${getRandomHeight(60, 80)}px`;
-        img.style.width = `calc((100% - ${25 * 4}px) / 25)`;
+        img.style.height = `${getRandomHeight(80, 100)}px`;
+        img.style.width = `calc((100% - ${6 * 12}px) / 6)`;
       } else {
         img.style.height = `${getRandomHeight(30, 40)}px`;
         img.style.width = `calc((100% - 236px) / 60)`;
@@ -49,7 +49,7 @@ const Archive = () => {
       opacity: 1,
       duration: 0.5,
       stagger: {
-        amount: isMobile ? 1.2 : 1.5,
+        amount: isMobile ? 1 : 1.5,
         grid: [totalRows, imagesPerRow],
         from: "random",
       },
@@ -69,8 +69,8 @@ const Archive = () => {
         const distX = (rect.left + rect.width / 2 - centerX) / 100;
         const distY = (rect.top + rect.height / 2 - centerY) / 100;
 
-        const zoomScale = isMobile ? 3 : 5;
-        const zoomDistX = isMobile ? 800 : 1200;
+        const zoomScale = isMobile ? 2.5 : 5;
+        const zoomDistX = isMobile ? 400 : 1200;
         const zoomDistY = isMobile ? 400 : 600;
 
         gsap.to(img, {
@@ -143,8 +143,6 @@ const Archive = () => {
         });
         document.addEventListener("touchend", handleDragEnd);
       }
-
-      document.body.style.overflow = "hidden";
     }
 
     function handleDragMove(e) {
@@ -171,8 +169,6 @@ const Archive = () => {
       document.removeEventListener("touchmove", handleDragMove);
       document.removeEventListener("mouseup", handleDragEnd);
       document.removeEventListener("touchend", handleDragEnd);
-
-      document.body.style.overflow = "";
     }
 
     dragLayer.addEventListener("mousedown", handleDragStart);
@@ -187,8 +183,6 @@ const Archive = () => {
       if (gallery) {
         gallery.innerHTML = "";
       }
-
-      document.body.style.overflow = "";
     };
   }, []);
 
