@@ -2,6 +2,48 @@
   position: relative;
   width: 100vw;
   height: 100svh;
-  color: var(--background);
+  color: var(--foreground);
   overflow: hidden;
+}
+
+.hero-header {
+  position: absolute;
+  top: 25svh;
+  width: 100%;
+  padding: 1.5rem;
+  display: flex;
+}
+
+.hero-header-col-lg {
+  flex: 4;
+}
+
+.hero-header-col-sm {
+  flex: 2;
+}
+
+.hero-footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 1.5rem;
+  display: flex;
+  align-items: flex-end;
+}
+
+.hero-footer-col-lg {
+  flex: 4;
+  display: flex;
+  gap: 4.5rem;
+}
+
+.hero-footer-col-lg h3 {
+  width: 65%;
+}
+
+.hero-footer-col-sm {
+  flex: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
 }

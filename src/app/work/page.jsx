@@ -1,6 +1,7 @@
 "use client";
 import "./work.css";
 import { portfolio } from "./portfolio";
+import { useTransitionRouter } from "next-view-transitions";
 
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
@@ -11,6 +12,51 @@ gsap.registerPlugin(ScrollTrigger);
 
 const page = () => {
   const workRef = useRef(null);
+  const router = useTransitionRouter();
+
+  function slideInOut() {
+    document.documentElement.animate(
+      [
+        {
+          opacity: 1,
+          transform: "translateY(0) scale(1)",
+        },
+        {
+          opacity: 0.2,
+          transform: "translateY(-30%) scale(0.90)",
+        },
+      ],
+      {
+        duration: 1500,
+        easing: "cubic-bezier(0.87, 0, 0.13, 1)",
+        fill: "forwards",
+        pseudoElement: "::view-transition-old(root)",
+      }
+    );
+
+    document.documentElement.animate(
+      [
+        {
+          clipPath: "polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)",
+        },
+        {
+          clipPath: "polygon(0% 100%, 100% 100%, 100% 0%, 0% 0%)",
+        },
+      ],
+      {
+        duration: 1500,
+        easing: "cubic-bezier(0.87, 0, 0.13, 1)",
+        fill: "forwards",
+        pseudoElement: "::view-transition-new(root)",
+      }
+    );
+  }
+
+  const navigateToProject = () => {
+    router.push("/sample-project", {
+      onTransitionReady: slideInOut,
+    });
+  };
 
   useGSAP(
     () => {
@@ -127,7 +173,12 @@ const page = () => {
             </div>
             <div className="work-projects-container">
               {yearData.projects.map((project, projectIndex) => (
-                <div key={projectIndex} className="work-project">
+                <div
+                  key={projectIndex}
+                  className="work-project"
+                  onClick={navigateToProject}
+                  style={{ cursor: "pointer" }}
+                >
                   <div className="work-project-img">
                     <img src={project.img} alt={project.name} />
                   </div>

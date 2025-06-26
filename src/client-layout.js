@@ -1,22 +1,12 @@
 "use client";
 import { useEffect, useState } from "react";
 
+import Menu from "@/components/Menu/Menu";
+
 import { ReactLenis } from "lenis/react";
 
 export default function ClientLayout({ children }) {
   const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 900);
-    };
-
-    checkMobile();
-
-    window.addEventListener("resize", checkMobile);
-
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
 
   const scrollSettings = isMobile
     ? {
@@ -52,6 +42,9 @@ export default function ClientLayout({ children }) {
 
   return (
     <ReactLenis root options={scrollSettings}>
+      <>
+        <Menu />
+      </>
       {children}
     </ReactLenis>
   );

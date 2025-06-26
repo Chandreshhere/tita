@@ -1,7 +1,7 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useCallback } from "react";
 
-const DynamicBackground = () => {
+const DynamicBackground = ({ isMenuOpen = false }) => {
   const canvasRef = useRef(null);
   const animationFrameRef = useRef(null);
   const programRef = useRef(null);
@@ -10,15 +10,23 @@ const DynamicBackground = () => {
   const mouseTrailRef = useRef([]);
   const lastMouseMoveRef = useRef(0);
   const decayFactorRef = useRef(0);
+  const frameCountRef = useRef(0);
+  const isMenuOpenRef = useRef(false);
 
+  // Keep original settings for quality
   const backgroundColor = "#1e1e1e";
   const patternLight = "#e4e7df";
   const patternDark = "#e4e7df";
   const animationSpeed = 1.0;
-  const fluidStrength = 2.0;
-  const trailLength = 20;
+  const fluidStrength = 1.8; // Slightly reduced from 2.0
+  const trailLength = 16; // Reduced from 20
 
-  const hexToRgb = (hex) => {
+  // Update menu state
+  useEffect(() => {
+    isMenuOpenRef.current = isMenuOpen;
+  }, [isMenuOpen]);
+
+  const hexToRgb = useCallback((hex) => {
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     return result
       ? {
@@ -27,21 +35,29 @@ const DynamicBackground = () => {
           b: parseInt(result[3], 16) / 255,
         }
       : null;
-  };
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const scale = 1.5;
+    // Improved canvas resolution for smoother fluid
+    const dpr = Math.min(window.devicePixelRatio || 1, 1.5); // Increased from 1.25
+    const scale = 1.3; // Increased from 1.2
     canvas.width = window.innerWidth * dpr * scale;
     canvas.height = window.innerHeight * dpr * scale;
     canvas.style.width = window.innerWidth + "px";
     canvas.style.height = window.innerHeight + "px";
 
     const gl =
-      canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+      canvas.getContext("webgl", {
+        alpha: false,
+        depth: false,
+        stencil: false,
+        antialias: true, // Enable anti-aliasing for smoother shapes
+        powerPreference: "high-performance",
+      }) || canvas.getContext("experimental-webgl");
+
     if (!gl) {
       console.error("WebGL not supported");
       return;
@@ -56,7 +72,12 @@ const DynamicBackground = () => {
       }
     `;
 
+    // High precision shader with fallback anti-aliasing
     const fragmentShaderSource = `
+      #ifdef GL_OES_standard_derivatives
+      #extension GL_OES_standard_derivatives : enable
+      #endif
+      
       precision highp float;
       uniform vec2 iResolution;
       uniform float iTime;
@@ -64,7 +85,7 @@ const DynamicBackground = () => {
       uniform vec3 uPatternLight;
       uniform vec3 uPatternDark;
       uniform float uAnimationSpeed;
-      uniform vec2 uMouseTrail[50];
+      uniform vec2 uMouseTrail[40];
       uniform int uTrailLength;
       uniform float uFluidStrength;
       uniform float uDecayFactor;
@@ -87,47 +108,68 @@ const DynamicBackground = () => {
       vec2 getFluidDisplacement(vec2 pos) {
         vec2 displacement = vec2(0.0);
         
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 40; i++) {
           if (i >= uTrailLength) break;
           
           vec2 trailPos = (uMouseTrail[i] * 2.0 - iResolution.xy) / iResolution.y;
           float dist = length(pos - trailPos);
+          
+          if (dist > 1.0) continue;
+          
           float trailDecay = pow(1.0 - float(i) / float(uTrailLength), 2.0);
-          float spatialDecay = exp(-dist * 2.0);
+          float spatialDecay = exp(-dist * 2.1);
           float influence = spatialDecay * trailDecay * pow(uDecayFactor, 0.5);
           
-          if (influence > 0.005) {
+          if (influence > 0.006) {
             vec2 direction = normalize(pos - trailPos + vec2(0.001));
             float angle = atan(direction.y, direction.x);
             
-            float noiseVal = noise(pos * 8.0 + iTime * 0.5);
-            angle += noiseVal * 0.5;
+            float noiseVal = noise(pos * 7.5 + iTime * 0.48);
+            angle += noiseVal * 0.48;
             
             vec2 flowDir = vec2(cos(angle + 1.57), sin(angle + 1.57));
-            displacement += flowDir * influence * uFluidStrength * 0.05;
+            displacement += flowDir * influence * uFluidStrength * 0.048;
           }
         }
         
         return displacement * smoothstep(0.0, 0.3, uDecayFactor);
       }
 
+      // Smooth step function with fixed smoothing width
+      float smoothStep(float threshold, float value) {
+        float smoothWidth = 0.002; // Fixed smooth width for consistent anti-aliasing
+        return smoothstep(threshold - smoothWidth, threshold + smoothWidth, value);
+      }
+
       #define R iResolution 
       void mainImage(out vec4 O, in vec2 I) {
         vec2 fluidDisp = getFluidDisplacement(2.*I/R.y - R.xy/R.y);
-        vec2 p = 2.*I/R.y - R.xy/R.y + fluidDisp;
+        vec2 p = (2.*I/R.y - R.xy/R.y + fluidDisp) * 1.45;
         
-        float a = max(abs(p.x) + p.y, -p.y) - .5, t = iTime * 0.15 * uAnimationSpeed, y = atan(p.x, p.y);
-        vec4 s = .25 * cos(vec4(25.*log(t)*sin(.25*t)/t, 1., 2., 0.) + t - y), e = s.yzxy,
-             f = clamp(min(vec4(a) - s, e - vec4(a)) * 1e2, 0., 1.),
-             g = (e - .1) * dot(f, 20.*(s - e));
+        float a = max(abs(p.x) + p.y, -p.y) - .48;
+        float t = iTime * 0.148 * uAnimationSpeed;
+        float y = atan(p.x, p.y);
         
-        float intensity = .2*g.x + .7*g.y + .07*g.z + g.w;
+        vec4 s = .24 * cos(vec4(23.*log(t)*sin(.24*t)/t, 1., 2., 0.) + t - y);
+        vec4 e = s.yzxy;
+        
+        // Use smooth step functions for anti-aliased edges
+        vec4 f = vec4(
+          smoothStep(0.0, a - s.x) * smoothStep(0.0, e.x - a),
+          smoothStep(0.0, a - s.y) * smoothStep(0.0, e.y - a),
+          smoothStep(0.0, a - s.z) * smoothStep(0.0, e.z - a),
+          smoothStep(0.0, a - s.w) * smoothStep(0.0, e.w - a)
+        );
+        
+        vec4 g = (e - .095) * dot(f, 18.5*(s - e));
+        
+        float intensity = .19*g.x + .68*g.y + .065*g.z + g.w;
         
         vec3 finalColor;
-        if (intensity > 0.1) {
-          finalColor = mix(uBackgroundColor, uPatternLight, clamp(intensity, 0., 1.));
-        } else if (intensity < -0.1) {
-          finalColor = mix(uBackgroundColor, uPatternDark, clamp(-intensity, 0., 1.));
+        if (intensity > 0.095) {
+          finalColor = mix(uBackgroundColor, uPatternLight, clamp(intensity * 1.05, 0., 1.));
+        } else if (intensity < -0.095) {
+          finalColor = mix(uBackgroundColor, uPatternDark, clamp(-intensity * 1.05, 0., 1.));
         } else {
           finalColor = uBackgroundColor;
         }
@@ -230,28 +272,32 @@ const DynamicBackground = () => {
     const positions = [-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1];
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
+    // Balanced mouse throttling for smoother interaction
     const handleMouseMove = (event) => {
+      const now = Date.now();
+      if (now - lastMouseMoveRef.current < 14) return; // Slightly more responsive
+
       const rect = canvas.getBoundingClientRect();
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      const scale = 1.5;
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      const scale = 1.3;
 
       const x = (event.clientX - rect.left) * dpr * scale;
       const y = (rect.height - (event.clientY - rect.top)) * dpr * scale;
 
-      lastMouseMoveRef.current = Date.now();
+      lastMouseMoveRef.current = now;
 
       mouseTrailRef.current.unshift({ x, y });
 
       if (mouseTrailRef.current.length > trailLength) {
-        mouseTrailRef.current = mouseTrailRef.current.slice(0, trailLength);
+        mouseTrailRef.current.length = trailLength;
       }
     };
 
-    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mousemove", handleMouseMove, { passive: true });
 
     function resizeCanvas() {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      const scale = 1.5;
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      const scale = 1.3;
       const displayWidth = canvas.clientWidth;
       const displayHeight = canvas.clientHeight;
       const canvasWidth = displayWidth * dpr * scale;
@@ -266,16 +312,17 @@ const DynamicBackground = () => {
       }
     }
 
-    function render() {
+    // No interference with render loop - let it run completely independently
+    function render(currentTime) {
       if (!gl || !program) return;
 
       resizeCanvas();
 
-      const currentTime = startTimeRef.current
-        ? (Date.now() - startTimeRef.current) / 1000 + 1.0
+      const time = startTimeRef.current
+        ? (currentTime - startTimeRef.current) / 1000 + 1.0
         : 1.0;
 
-      const timeSinceLastMove = (Date.now() - lastMouseMoveRef.current) / 1000;
+      const timeSinceLastMove = (currentTime - lastMouseMoveRef.current) / 1000;
       const targetDecayFactor =
         timeSinceLastMove < 0.02
           ? 1.0
@@ -284,7 +331,6 @@ const DynamicBackground = () => {
       const lerpSpeed = timeSinceLastMove < 0.1 ? 0.15 : 0.03;
       decayFactorRef.current +=
         (targetDecayFactor - decayFactorRef.current) * lerpSpeed;
-      const decayFactor = decayFactorRef.current;
 
       gl.clearColor(0, 0, 0, 1);
       gl.clear(gl.COLOR_BUFFER_BIT);
@@ -295,14 +341,15 @@ const DynamicBackground = () => {
       const lightColor = hexToRgb(patternLight);
       const darkColor = hexToRgb(patternDark);
 
-      const trailArray = new Float32Array(100);
-      for (let i = 0; i < Math.min(mouseTrailRef.current.length, 50); i++) {
+      const trailArray = new Float32Array(80); // Reduced from 100
+      const activeTrailLength = Math.min(mouseTrailRef.current.length, 40); // Reduced from 50
+      for (let i = 0; i < activeTrailLength; i++) {
         trailArray[i * 2] = mouseTrailRef.current[i].x;
         trailArray[i * 2 + 1] = mouseTrailRef.current[i].y;
       }
 
       gl.uniform2f(resolutionUniformLocation, canvas.width, canvas.height);
-      gl.uniform1f(timeUniformLocation, currentTime);
+      gl.uniform1f(timeUniformLocation, time);
       gl.uniform3f(
         backgroundColorUniformLocation,
         bgColor.r,
@@ -328,7 +375,7 @@ const DynamicBackground = () => {
         Math.min(mouseTrailRef.current.length, trailLength)
       );
       gl.uniform1f(fluidStrengthUniformLocation, fluidStrength);
-      gl.uniform1f(decayFactorUniformLocation, decayFactor);
+      gl.uniform1f(decayFactorUniformLocation, decayFactorRef.current);
 
       gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
       gl.enableVertexAttribArray(positionAttributeLocation);
@@ -342,16 +389,17 @@ const DynamicBackground = () => {
       );
       gl.drawArrays(gl.TRIANGLES, 0, 6);
 
+      frameCountRef.current++;
       animationFrameRef.current = requestAnimationFrame(render);
     }
 
-    startTimeRef.current = Date.now();
-    render();
+    startTimeRef.current = performance.now();
+    animationFrameRef.current = requestAnimationFrame(render);
 
     const handleResize = () => {
       resizeCanvas();
     };
-    window.addEventListener("resize", handleResize);
+    window.addEventListener("resize", handleResize, { passive: true });
 
     return () => {
       document.removeEventListener("mousemove", handleMouseMove);
@@ -363,7 +411,7 @@ const DynamicBackground = () => {
         gl.deleteProgram(programRef.current);
       }
     };
-  }, []);
+  }, [hexToRgb]);
 
   return (
     <canvas
@@ -378,6 +426,7 @@ const DynamicBackground = () => {
         imageRendering: "pixelated",
         imageRendering: "-moz-crisp-edges",
         imageRendering: "crisp-edges",
+        willChange: "transform",
       }}
     />
   );
