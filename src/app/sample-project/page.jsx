@@ -66,18 +66,18 @@ const page = () => {
         <div className="sp-info">
           <div className="sp-col sp-col-lg">
             <div className="sp-tags">
-              <p className="sm">Creative Direction</p>
-              <p className="sm">Motion Design</p>
-              <p className="sm">Visual Identity</p>
+              <p className="sm caps mono">Creative Direction</p>
+              <p className="sm caps mono">Motion Design</p>
+              <p className="sm caps mono">Visual Identity</p>
             </div>
           </div>
           <div className="sp-col sp-col-sm">
             <div className="sp-year">
-              <p className="sm">2025</p>
+              <p className="sm caps mono">2025</p>
             </div>
 
             <div className="client">
-              <p className="sm">Self-Initiated</p>
+              <p className="sm caps mono">Self-Initiated</p>
             </div>
           </div>
         </div>
@@ -108,7 +108,7 @@ const page = () => {
               </p>
 
               <div className="sp-link">
-                <p>&#8599; Live Demo</p>
+                <p className="sm caps mono">Live Demo</p>
               </div>
             </div>
           </div>
@@ -168,7 +168,7 @@ const page = () => {
 
       <section className="sp-next-project">
         <div className="sp-next-project-copy">
-          <p className="sm">(More Projects)</p>
+          <p className="sm caps mono">More Projects</p>
           <div className="sp-next-project-names">
             <h1>Echo, Nocturne Blur, Phase // 03, SURF9</h1>
           </div>
