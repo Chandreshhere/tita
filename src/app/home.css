@@ -51,3 +51,22 @@
 .hero-tags {
   flex-shrink: 0;
 }
+
+@media (max-width: 1000px) {
+  .hero {
+    background-color: var(--background);
+  }
+
+  .hero-header-col-lg,
+  .hero-footer-col-lg {
+    display: none;
+  }
+
+  .hero-header {
+    top: 50svh;
+  }
+
+  .hero h3 {
+    font-size: clamp(2rem, 1.5rem + 2.5vw, 5rem);
+  }
+}
