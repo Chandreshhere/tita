@@ -5,7 +5,7 @@ export const portfolio = [
       {
         name: "Echo",
         tags: "creative direction, design",
-        img: "/images/work/work_001.jpeg",
+        img: "/images/work/work_007.jpeg",
       },
       {
         name: "Nocturne Blur",
@@ -35,7 +35,7 @@ export const portfolio = [
       {
         name: "Mono Flower",
         tags: "art direction, design",
-        img: "/images/work/work_007.jpeg",
+        img: "/images/work/work_001.jpeg",
       },
       {
         name: "GL Loop",
