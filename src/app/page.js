@@ -9,7 +9,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 import DynamicBackground from "@/components/DynamicBackground/DynamicBackground";
-import AnimeLink from "@/components/AnimeLink/AnimeLink";
+import BtnLink from "@/components/BtnLink/BtnLink";
 
 export default function Home() {
   return (
@@ -42,7 +42,7 @@ export default function Home() {
               </div>
 
               <div className="hero-link">
-                <AnimeLink route="/contact" label="contact" />
+                <BtnLink route="/contact" label="contact" />
               </div>
             </div>
           </div>

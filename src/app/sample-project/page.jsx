@@ -8,7 +8,7 @@ import { useRef } from "react";
 
 gsap.registerPlugin(ScrollTrigger);
 
-import AnimeLink from "@/components/AnimeLink/AnimeLink";
+import BtnLink from "@/components/BtnLink/BtnLink";
 
 const page = () => {
   const sampleProjectRef = useRef(null);
@@ -115,7 +115,7 @@ const page = () => {
               </p>
 
               <div className="sp-link">
-                <AnimeLink route="/" label="Live Demo" />
+                <BtnLink route="/" label="Live Demo" />
               </div>
             </div>
           </div>

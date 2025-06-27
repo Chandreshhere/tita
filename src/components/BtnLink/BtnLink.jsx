@@ -2,9 +2,9 @@
 import { useTransitionRouter } from "next-view-transitions";
 import { IoMdArrowForward } from "react-icons/io";
 
-import "./AnimeLink.css";
+import "./BtnLink.css";
 
-const AnimeLink = ({ label, route, dark = false }) => {
+const BtnLink = ({ label, route, dark = false }) => {
   const router = useTransitionRouter();
 
   function slideInOut() {
@@ -76,4 +76,4 @@ const AnimeLink = ({ label, route, dark = false }) => {
   );
 };
 
-export default AnimeLink;
+export default BtnLink;
