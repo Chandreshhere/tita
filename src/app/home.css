@@ -47,3 +47,7 @@
   justify-content: space-between;
   align-items: flex-end;
 }
+
+.hero-tags {
+  flex-shrink: 0;
+}

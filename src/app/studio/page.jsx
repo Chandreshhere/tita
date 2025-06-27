@@ -3,7 +3,7 @@ import "./studio.css";
 
 import WhoWeAre from "@/components/WhoWeAre/WhoWeAre";
 import ProcessCards from "@/components/ProcessCards/ProcessCards";
-
+import AnimeLink from "@/components/AnimeLink/AnimeLink";
 import Footer from "@/components/Footer/Footer";
 
 const page = () => {
@@ -50,7 +50,7 @@ const page = () => {
               </h3>
 
               <div className="mission-link">
-                <p className="sm caps mono">Live Demo</p>
+                <AnimeLink route="/contact" label="Live Demo" dark />
               </div>
             </div>
           </div>

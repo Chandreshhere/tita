@@ -1,18 +1,30 @@
 "use client";
 import { Link } from "next-view-transitions";
+import { IoMdArrowForward } from "react-icons/io";
 
-const AnimeLink = ({ label, route }) => {
+import "./AnimeLink.css";
+
+const AnimeLink = ({ label, route, dark = false }) => {
   return (
-    <div className="anime-link">
-      <div className="anime-link-label">
-        <p>
-          <Link className="sm caps mono" href={route}>
-            {label}
-          </Link>
-        </p>
+    <Link
+      className={`sm caps mono ${dark ? "link-dark" : "link-light"}`}
+      href={route}
+    >
+      <div
+        className={`anime-link ${
+          dark ? "anime-link-dark" : "anime-link-light"
+        }`}
+      >
+        <div className="anime-link-label">
+          <p className="sm caps mono">
+            <span>{label}</span>
+          </p>
+        </div>
+        <div className="anime-link-icon">
+          <IoMdArrowForward color={dark ? "#fff" : "#000"} />
+        </div>
       </div>
-      <div className="anime-link-icon"></div>
-    </div>
+    </Link>
   );
 };
 
