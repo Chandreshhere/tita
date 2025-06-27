@@ -100,6 +100,18 @@ a.caps.mono {
   color: var(--background);
 }
 
+.revealer {
+  position: relative;
+  width: max-content;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+}
+
+@media (max-width: 1000px) {
+  h1 {
+    letter-spacing: -0.025rem;
+  }
+}
+
 html.lenis {
   height: auto;
 }
@@ -143,16 +155,4 @@ html.lenis {
 ::view-transition-old(root) {
   z-index: 1;
   animation: none !important;
-}
-
-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.revealer {
-  position: relative;
-  width: max-content;
-  clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
 }

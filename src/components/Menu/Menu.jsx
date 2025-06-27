@@ -159,7 +159,7 @@ const Menu = ({ onMenuStateChange }) => {
       router.push(path, {
         onTransitionReady: slideInOut,
       });
-    }, 750);
+    }, 0);
   };
 
   const openMenu = () => {
@@ -420,7 +420,7 @@ const Menu = ({ onMenuStateChange }) => {
           <div className="menu-footer" ref={menuFooterColsRef}>
             <div className="menu-footer-col">
               <div className="revealer">
-                <p className="sm caps mono">&copy; 2025 All rights reserved</p>
+                <p className="sm caps mono">&copy; 2025 All Rights Reserved</p>
               </div>
             </div>
             <div className="menu-footer-col">
