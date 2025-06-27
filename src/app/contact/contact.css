@@ -55,6 +55,10 @@
   flex: 2;
 }
 
+.contact-copy-links a {
+  color: var(--foreground);
+}
+
 @media (max-width: 1000px) {
   .contact-img-wrapper {
     display: none;

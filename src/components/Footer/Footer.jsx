@@ -11,19 +11,29 @@ const Footer = () => {
             <p className="sm">( Socials )</p>
           </div>
           <div className="footer-social">
-            <h2>Email</h2>
+            <a href="mailto:contact@codegrid.com">
+              <h2>Email</h2>
+            </a>
           </div>
           <div className="footer-social">
-            <h2>LinkedIn</h2>
+            <a href="https://www.youtube.com/@codegrid">
+              <h2>LinkedIn</h2>
+            </a>
           </div>
           <div className="footer-social">
-            <h2>Behance</h2>
+            <a href="https://www.youtube.com/@codegrid">
+              <h2>Behance</h2>
+            </a>
           </div>
           <div className="footer-social">
-            <h2>Instagram</h2>
+            <a href="https://www.youtube.com/@codegrid">
+              <h2>Instagram</h2>
+            </a>
           </div>
           <div className="footer-social">
-            <h2>Vimeo</h2>
+            <a href="https://vimeo.com/codegrid">
+              <h2>Vimeo</h2>
+            </a>
           </div>
         </div>
       </div>

@@ -1,7 +1,55 @@
 "use client";
 import "./contact.css";
+import { useTransitionRouter } from "next-view-transitions";
 
 const page = () => {
+  const router = useTransitionRouter();
+
+  function slideInOut() {
+    document.documentElement.animate(
+      [
+        {
+          opacity: 1,
+          transform: "translateY(0) scale(1)",
+        },
+        {
+          opacity: 0.2,
+          transform: "translateY(-30%) scale(0.90)",
+        },
+      ],
+      {
+        duration: 1500,
+        easing: "cubic-bezier(0.87, 0, 0.13, 1)",
+        fill: "forwards",
+        pseudoElement: "::view-transition-old(root)",
+      }
+    );
+
+    document.documentElement.animate(
+      [
+        {
+          clipPath: "polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)",
+        },
+        {
+          clipPath: "polygon(0% 100%, 100% 100%, 100% 0%, 0% 0%)",
+        },
+      ],
+      {
+        duration: 1500,
+        easing: "cubic-bezier(0.87, 0, 0.13, 1)",
+        fill: "forwards",
+        pseudoElement: "::view-transition-new(root)",
+      }
+    );
+  }
+
+  const handleNavigation = (e, route) => {
+    e.preventDefault();
+    router.push(route, {
+      onTransitionReady: slideInOut,
+    });
+  };
+
   return (
     <div className="contact">
       <div className="contact-img-wrapper">
@@ -37,9 +85,15 @@ const page = () => {
         </div>
 
         <div className="contact-copy-links">
-          <p className="caps sm">Studio Overview</p>
-          <p className="caps sm">Project Archive</p>
-          <p className="caps sm">Selected Work</p>
+          <a href="/studio" onClick={(e) => handleNavigation(e, "/studio")}>
+            <p className="caps sm">Studio Overview</p>
+          </a>
+          <a href="/archive" onClick={(e) => handleNavigation(e, "/archive")}>
+            <p className="caps sm">Project Archive</p>
+          </a>
+          <a href="/work" onClick={(e) => handleNavigation(e, "/work")}>
+            <p className="caps sm">Selected Work</p>
+          </a>
         </div>
       </div>
 

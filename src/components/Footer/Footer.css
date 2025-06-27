@@ -34,6 +34,10 @@
   color: var(--foreground-200);
 }
 
+.footer a {
+  color: var(--foreground);
+}
+
 @media (max-width: 1000px) {
   .fs-col-lg {
     display: none;
