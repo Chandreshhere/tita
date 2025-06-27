@@ -13,19 +13,27 @@ const DynamicBackground = ({ logoPath = "/images/logos/logo_light.png" }) => {
   const mouseRef = useRef({ x: 0, y: 0 });
   const execCountRef = useRef(0);
   const isCleanedUpRef = useRef(false);
+  const isMobileRef = useRef(false);
 
   const CONFIG = {
-    canvasBg: "#1a1a1a",
+    canvasBg: "#141414",
     logoSize: 1100,
     distortionRadius: 3000,
     forceStrength: 0.003,
     maxDisplacement: 100,
-    returnForce: 0.02,
+    returnForce: 0.025,
   };
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
+
+    const checkMobile = () => window.innerWidth < 1000;
+    isMobileRef.current = checkMobile();
+
+    if (isMobileRef.current) {
+      return;
+    }
 
     isCleanedUpRef.current = false;
 
