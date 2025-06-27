@@ -36,3 +36,21 @@
   position: relative;
   left: 20%;
 }
+
+.contact-footer {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100vw;
+  padding: 1.5rem;
+  display: flex;
+  gap: 3rem;
+}
+
+.fc-col-lg {
+  flex: 4;
+}
+
+.fc-col-sm {
+  flex: 2;
+}

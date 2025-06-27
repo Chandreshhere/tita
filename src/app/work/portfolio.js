@@ -33,8 +33,8 @@ export const portfolio = [
         img: "/images/work/work_006.jpeg",
       },
       {
-        name: "Timefold 22",
-        tags: "creative direction, design",
+        name: "Mono Flower",
+        tags: "art direction, design",
         img: "/images/work/work_007.jpeg",
       },
       {
@@ -183,8 +183,8 @@ export const portfolio = [
     year: "2019",
     projects: [
       {
-        name: "Mono Flower",
-        tags: "art direction, design",
+        name: "Timefold 22",
+        tags: "creative direction, design",
         img: "/images/work/work_006.jpeg",
       },
       {

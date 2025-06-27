@@ -42,6 +42,15 @@ const page = () => {
           <p className="caps sm">Work</p>
         </div>
       </div>
+
+      <div className="contact-footer">
+        <div className="fc-col-lg">
+          <p className="sm">Developed by Codegrid</p>
+        </div>
+        <div className="fc-col-sm">
+          <p className="sm">&copy; 2025 All Rights Reserved</p>
+        </div>
+      </div>
     </div>
   );
 };

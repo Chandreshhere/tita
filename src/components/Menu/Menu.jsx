@@ -307,147 +307,151 @@ const Menu = ({ onMenuStateChange }) => {
   };
 
   return (
-    <div className="menu" ref={menuRef}>
-      <div className="nav" ref={navRef}>
-        <div className="nav-logo">
-          <div className="revealer">
-            <a
-              href="/"
-              ref={navLogoRef}
-              onClick={(e) => {
-                e.preventDefault();
-                if (isExactPath("/")) return;
-
-                router.push("/", {
-                  onTransitionReady: slideInOut,
-                });
-              }}
-            >
-              <img
-                className="logo-img"
-                src="/images/logos/logo_light.png"
-                alt=""
-              />
-            </a>
-          </div>
-        </div>
-        <div className="nav-items">
-          <div className="nav-menu-time">
+    <>
+      <div className="nav-container">
+        <div className="nav" ref={navRef}>
+          <div className="nav-logo">
             <div className="revealer">
-              <p className="sm caps mono">{currentTime}</p>
-            </div>
-          </div>
+              <a
+                href="/"
+                ref={navLogoRef}
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (isExactPath("/")) return;
 
-          <div className="nav-menu-toggle-open">
-            <div className="revealer" onClick={openMenu}>
-              <p className="sm caps mono" ref={menuBtnRef}>
-                Menu
-              </p>
+                  router.push("/", {
+                    onTransitionReady: slideInOut,
+                  });
+                }}
+              >
+                <img
+                  className="logo-img"
+                  src="/images/logos/logo_light.png"
+                  alt=""
+                />
+              </a>
             </div>
           </div>
-        </div>
-      </div>
-      <div className="menu-overlay" ref={menuOverlayRef}>
-        <div className="menu-overlay-nav">
-          <div className="menu-overlay-nav-toggle-close">
-            <div className="revealer" onClick={closeMenu}>
-              <p className="sm caps mono" ref={closeBtnRef}>
-                Close
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="menu-overlay-items" ref={menuItemsRef}>
-          <div className="revealer">
-            <a
-              href="/"
-              onClick={(e) => {
-                e.preventDefault();
-                navigateTo("/");
-              }}
-            >
-              <h1>index,</h1>
-            </a>
-          </div>
-          <div className="revealer">
-            <a
-              href="/work"
-              onClick={(e) => {
-                e.preventDefault();
-                navigateTo("/work");
-              }}
-            >
-              <h1>work,</h1>
-            </a>
-          </div>
-          <div className="revealer">
-            <a
-              href="/studio"
-              onClick={(e) => {
-                e.preventDefault();
-                navigateTo("/studio");
-              }}
-            >
-              <h1>studio,</h1>
-            </a>
-          </div>
-          <div className="revealer">
-            <a
-              href="/archive"
-              onClick={(e) => {
-                e.preventDefault();
-                navigateTo("/archive");
-              }}
-            >
-              <h1>archive,</h1>
-            </a>
-          </div>
-          <div className="revealer">
-            <a
-              href="/contact"
-              onClick={(e) => {
-                e.preventDefault();
-                navigateTo("/contact");
-              }}
-            >
-              <h1>contact</h1>
-            </a>
-          </div>
-        </div>
-        <div className="menu-footer" ref={menuFooterColsRef}>
-          <div className="menu-footer-col">
-            <div className="revealer">
-              <p className="sm caps mono">&copy; 2025 All rights reserved</p>
-            </div>
-          </div>
-          <div className="menu-footer-col">
-            <div className="socials">
+          <div className="nav-items">
+            <div className="nav-menu-time">
               <div className="revealer">
-                <a
-                  className="sm caps mono"
-                  href="https://www.youtube.com/@codegrid"
-                >
-                  YouTube
-                </a>
+                <p className="sm caps mono">{currentTime}</p>
               </div>
-              <div className="revealer">
-                <a
-                  className="sm caps mono"
-                  href="https://www.instagram.com/codegridweb/"
-                >
-                  Instagram
-                </a>
-              </div>
-              <div className="revealer">
-                <a className="sm caps mono" href="https://x.com/codegridweb">
-                  X
-                </a>
+            </div>
+
+            <div className="nav-menu-toggle-open">
+              <div className="revealer" onClick={openMenu}>
+                <p className="sm caps mono" ref={menuBtnRef}>
+                  Menu
+                </p>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+      <div className="menu" ref={menuRef}>
+        <div className="menu-overlay" ref={menuOverlayRef}>
+          <div className="menu-overlay-nav">
+            <div className="menu-overlay-nav-toggle-close">
+              <div className="revealer" onClick={closeMenu}>
+                <p className="sm caps mono" ref={closeBtnRef}>
+                  Close
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="menu-overlay-items" ref={menuItemsRef}>
+            <div className="revealer">
+              <a
+                href="/"
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigateTo("/");
+                }}
+              >
+                <h1>index,</h1>
+              </a>
+            </div>
+            <div className="revealer">
+              <a
+                href="/work"
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigateTo("/work");
+                }}
+              >
+                <h1>work,</h1>
+              </a>
+            </div>
+            <div className="revealer">
+              <a
+                href="/studio"
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigateTo("/studio");
+                }}
+              >
+                <h1>studio,</h1>
+              </a>
+            </div>
+            <div className="revealer">
+              <a
+                href="/archive"
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigateTo("/archive");
+                }}
+              >
+                <h1>archive,</h1>
+              </a>
+            </div>
+            <div className="revealer">
+              <a
+                href="/contact"
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigateTo("/contact");
+                }}
+              >
+                <h1>contact</h1>
+              </a>
+            </div>
+          </div>
+          <div className="menu-footer" ref={menuFooterColsRef}>
+            <div className="menu-footer-col">
+              <div className="revealer">
+                <p className="sm caps mono">&copy; 2025 All rights reserved</p>
+              </div>
+            </div>
+            <div className="menu-footer-col">
+              <div className="socials">
+                <div className="revealer">
+                  <a
+                    className="sm caps mono"
+                    href="https://www.youtube.com/@codegrid"
+                  >
+                    YouTube
+                  </a>
+                </div>
+                <div className="revealer">
+                  <a
+                    className="sm caps mono"
+                    href="https://www.instagram.com/codegridweb/"
+                  >
+                    Instagram
+                  </a>
+                </div>
+                <div className="revealer">
+                  <a className="sm caps mono" href="https://x.com/codegridweb">
+                    X
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
   );
 };
 

@@ -19,11 +19,79 @@
   -webkit-font-smoothing: antialiased;
 }
 
-.nav {
-  pointer-events: all;
+.nav-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: auto;
+  z-index: 1000;
+  mix-blend-mode: difference;
+  pointer-events: none;
 }
 
-.nav,
+.nav {
+  pointer-events: all;
+  position: relative;
+  width: 100vw;
+  padding: 1.5rem;
+  display: flex;
+  gap: 1.5rem;
+}
+
+.nav a,
+.nav p {
+  position: relative;
+  color: var(--foreground);
+  display: block;
+  text-decoration: none;
+  line-height: 1;
+  will-change: transform;
+  -webkit-font-smoothing: antialiased;
+}
+
+.nav-logo {
+  flex: 2;
+}
+
+.nav-items {
+  flex: 1;
+  display: flex;
+}
+
+.nav-menu-toggle-open,
+.nav-menu-time {
+  flex: 1;
+}
+
+.nav-menu-toggle-open {
+  display: flex;
+  justify-content: flex-end;
+  height: max-content;
+}
+
+.nav-menu-toggle-open .revealer {
+  cursor: pointer;
+}
+
+img.logo-img {
+  width: 2rem;
+}
+
+.menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100svh;
+  overflow: hidden;
+  background-color: var(--background-200);
+  will-change: opacity;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0;
+}
+
 .menu-overlay-nav {
   position: fixed;
   top: 0;
@@ -34,52 +102,15 @@
   gap: 1.5rem;
 }
 
-.nav-logo,
-.menu-overlay-nav-logo {
-  flex: 2;
-}
-
-.nav-items {
-  flex: 1;
-  display: flex;
-}
-
-.nav-menu-toggle-open,
-.nav-menu-time,
 .menu-overlay-nav-toggle-close {
   flex: 1;
-}
-
-.nav-menu-toggle-open,
-.menu-overlay-nav-toggle-close {
   display: flex;
   justify-content: flex-end;
   height: max-content;
 }
 
-.menu-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100svh;
-  overflow: hidden;
-  background-color: #141414;
-  will-change: opacity;
-  pointer-events: none;
-  z-index: 2;
-  opacity: 0;
-}
-
-.nav-menu-toggle-open .revealer,
-.nav-cart-btn .revealer,
-.menu-overlay-nav-logo .revealer,
 .menu-overlay-nav-toggle-close .revealer {
   cursor: pointer;
-}
-
-img.logo-img {
-  width: 2rem;
 }
 
 .menu-overlay a,
@@ -123,6 +154,13 @@ img.logo-img {
 .menu-overlay-items .revealer {
   flex: 0 0 auto; /* Don't grow or shrink, use natural width */
   min-width: max-content; /* Ensures text doesn't break within items */
+}
+
+/* Revealer utility class */
+.revealer {
+  position: relative;
+  width: max-content;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
 }
 
 @media (max-width: 900px) {

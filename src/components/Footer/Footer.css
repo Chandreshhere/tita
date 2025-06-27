@@ -14,6 +14,7 @@
 .footer-copy {
   display: flex;
   gap: 3rem;
+  align-items: flex-end;
 }
 
 .fs-col-lg,

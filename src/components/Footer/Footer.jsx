@@ -30,11 +30,10 @@ const Footer = () => {
 
       <div className="footer-copy">
         <div className="fc-col-lg">
-          <p className="sm">Developed by</p>
-          <p className="sm">Codegrid</p>
+          <p className="sm">Developed by Codegrid</p>
         </div>
         <div className="fc-col-sm">
-          <p className="sm">&copy; 2025 All rights reserved.</p>
+          <p className="sm">&copy; 2025 All Rights Reserved</p>
         </div>
       </div>
     </div>

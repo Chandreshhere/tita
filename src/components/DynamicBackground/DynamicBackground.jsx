@@ -15,12 +15,12 @@ const DynamicBackground = ({ logoPath = "/images/logos/logo_light.png" }) => {
   const isCleanedUpRef = useRef(false);
 
   const CONFIG = {
-    canvasBg: "#141414",
+    canvasBg: "#1a1a1a",
     logoSize: 1100,
     distortionRadius: 3000,
     forceStrength: 0.003,
     maxDisplacement: 100,
-    returnForce: 0.025,
+    returnForce: 0.02,
   };
 
   useEffect(() => {

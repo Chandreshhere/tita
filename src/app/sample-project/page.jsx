@@ -8,6 +8,8 @@ import { useRef } from "react";
 
 gsap.registerPlugin(ScrollTrigger);
 
+import AnimeLink from "@/components/AnimeLink/AnimeLink";
+
 const page = () => {
   const sampleProjectRef = useRef(null);
 
@@ -107,8 +109,8 @@ const page = () => {
                 between chaos and control.
               </p>
 
-              <div className="sp-link">
-                <p className="sm caps mono">Live Demo</p>
+              <div className="hero-link">
+                <AnimeLink route="/" label="Live Demo" />
               </div>
             </div>
           </div>
@@ -170,7 +172,7 @@ const page = () => {
         <div className="sp-next-project-copy">
           <p className="sm caps mono">More Projects</p>
           <div className="sp-next-project-names">
-            <h1>Echo, Nocturne Blur, Phase // 03, SURF9</h1>
+            <h1>Hidden Signal</h1>
           </div>
         </div>
       </section>
