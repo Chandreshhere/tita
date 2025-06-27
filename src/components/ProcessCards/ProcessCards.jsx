@@ -11,31 +11,31 @@ const ProcessCards = () => {
   const processCardsData = [
     {
       index: "01",
-      title: "Purpose",
-      image: "/images/process/process-1.jpg",
+      title: "Principles",
+      image: "/images/process/process_001.jpeg",
       description:
-        "We begin with intent. Understanding your goals, audience, and vision sets the foundation for everything to come.",
+        "We design with restraint and intention. Every decision is shaped by a set of values—clarity, structure, and calm execution.",
     },
     {
       index: "02",
-      title: "Roadmap",
-      image: "/images/process/process-2.jpg",
+      title: "Approach",
+      image: "/images/process/process_002.jpeg",
       description:
-        "Structure meets story. We sketch the flow, architecture, and interactions to ensure the experience feels effortless.",
+        "Our process is iterative and deliberate. We prioritize simplicity over excess, and build systems that scale with clarity.",
     },
     {
       index: "03",
-      title: "Development",
-      image: "/images/process/process-3.jpg",
+      title: "Practice",
+      image: "/images/process/process_003.jpeg",
       description:
-        "Design and development work in harmony. Every element is crafted to feel natural, refined, and purpose-built.",
+        "We work at the intersection of design and code. Every detail is shaped by consistency, rhythm, and quiet precision.",
     },
     {
       index: "04",
-      title: "Launch",
-      image: "/images/process/process-4.jpg",
+      title: "Vision",
+      image: "/images/process/process_004.jpeg",
       description:
-        "After rigorous testing and polish, we deploy with precision. Your site goes live—stable, scalable, and ready to grow.",
+        "We believe the web should feel honest and effortless. Our aim is to create digital experiences that stand the test of time.",
     },
   ];
 

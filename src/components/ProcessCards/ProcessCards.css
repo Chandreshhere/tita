@@ -33,11 +33,13 @@
 
 .process-card-index {
   flex: 2;
+  color: var(--background);
 }
 
 .process-card-content {
   flex: 4;
   padding-top: 1.5rem;
+  color: var(--background);
 }
 
 .process-card-content-wrapper {
@@ -66,4 +68,27 @@
 
 .process-card-copy-description {
   flex: 4;
+}
+
+@media (max-width: 1000px) {
+  .process-card {
+    gap: 0;
+  }
+
+  .process-card,
+  .process-card-copy {
+    flex-direction: column;
+  }
+
+  .process-card-copy {
+    gap: 0.5rem;
+  }
+
+  .process-card-index {
+    flex: 1;
+  }
+
+  .process-card-content-wrapper {
+    width: 100%;
+  }
 }

@@ -24,7 +24,7 @@
 .studio-hero-img {
   aspect-ratio: 7/5;
   position: relative;
-  width: 75%;
+  width: calc(100vw - 3rem);
   margin: 0 auto -25% auto;
 }
 
@@ -96,4 +96,29 @@
   display: flex;
   flex-direction: column;
   gap: 3rem;
+}
+
+.recognition-copy p {
+  color: var(--foreground-200);
+}
+
+@media (max-width: 1000px) {
+  .studio-hero {
+    padding: 7.5rem 1.5rem 1.5rem 1.5rem;
+  }
+
+  .studio-header-copy,
+  .mission-intro-copy,
+  .recognition-copy {
+    width: 100%;
+  }
+
+  .mission-intro-col-sm {
+    display: none;
+  }
+
+  .mission-intro {
+    min-height: 100svh;
+    height: 100%;
+  }
 }

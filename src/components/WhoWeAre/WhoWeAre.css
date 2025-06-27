@@ -68,3 +68,9 @@
   top: 50%;
   left: 95%;
 }
+
+@media (max-width: 1000px) {
+  .whoweare-img {
+    width: 50vw;
+  }
+}

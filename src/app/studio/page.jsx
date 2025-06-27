@@ -23,10 +23,10 @@ const page = () => {
         <section className="studio-header">
           <div className="studio-header-copy">
             <h2>
-              At OH Architecture, we take a collaborative approach. Whether
-              we’re working in the studio or alongside our clients and
-              partnerws, it’s this shared process that helps us create work that
-              reflects your vision and ours.
+              At Wu Wei Studio, we approach every project with quiet focus.
+              Through close collaboration and considered process, we build
+              digital work that reflects both the needs of our clients and the
+              values of our practice.
             </h2>
           </div>
         </section>
@@ -38,19 +38,20 @@ const page = () => {
           <div className="mission-intro-col-lg">
             <div className="mission-intro-copy">
               <h3>
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Rerum
-                quod magnam iste a obcaecati asperiores officia, minus vero, est
-                accusantium, doloribus molestiae ad at. Eaque amet minus aliquam
-                vitae quod.
+                We are a digital studio dedicated to creating clear and
+                purposeful online experiences. Our work is rooted in structure,
+                guided by systems, and shaped through close collaboration.
               </h3>
 
               <h3>
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Saepe
-                pariatur deleniti nostrum modi incidunt! Quam?
+                With a focus on design and development, we build scalable
+                solutions that reflect quiet precision and long-term value.
+                Every project is an exercise in restraint, intention, and
+                technical care.
               </h3>
 
               <div className="mission-link">
-                <AnimeLink route="/contact" label="Live Demo" dark />
+                <AnimeLink route="/contact" label="View Work" dark />
               </div>
             </div>
           </div>
@@ -60,13 +61,12 @@ const page = () => {
 
         <section className="recognition">
           <div className="recognition-copy">
-            <p className="caps">(Recognition)</p>
+            <p className="sm">(Recognition)</p>
 
             <h2>
-              At OH Architecture, we take a collaborative approach. Whether
-              we’re working in the studio or alongside our clients and
-              partnerws, it’s this shared process that helps us create work that
-              reflects your vision and ours.
+              Our work has been recognized by digital platforms and design
+              communities for its clarity, consistency, and attention to detail.
+              We focus on building systems that go beyond visuals experiences.
             </h2>
           </div>
         </section>
