@@ -37,7 +37,7 @@ const page = () => {
 
           const isMobile = window.innerWidth < 1000;
           const baseDistance = window.innerHeight + containerHeight;
-          const mobileMultiplier = isMobile ? 1.5 : 1;
+          const mobileMultiplier = isMobile ? 1.25 : 1;
           const moveDistance = baseDistance * mobileMultiplier;
 
           gsap.to(progressContainer, {
