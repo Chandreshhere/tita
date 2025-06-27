@@ -54,3 +54,13 @@
 .fc-col-sm {
   flex: 2;
 }
+
+@media (max-width: 1000px) {
+  .contact-img-wrapper {
+    display: none;
+  }
+
+  .contact-copy {
+    padding: 1.5rem;
+  }
+}

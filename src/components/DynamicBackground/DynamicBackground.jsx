@@ -16,7 +16,7 @@ const DynamicBackground = ({ logoPath = "/images/logos/logo_light.png" }) => {
   const isMobileRef = useRef(false);
 
   const CONFIG = {
-    canvasBg: "#141414",
+    canvasBg: "#1a1a1a",
     logoSize: 1100,
     distortionRadius: 3000,
     forceStrength: 0.003,

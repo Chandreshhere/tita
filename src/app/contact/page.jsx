@@ -25,21 +25,21 @@ const page = () => {
         <div className="contact-copy-addresses">
           <div className="contact-address">
             <p className="caps sm">Toronto</p>
-            <p className="caps sm">1805 Wilson Ave</p>
-            <p className="caps sm">M9M 1A2</p>
+            <p className="caps sm">Studio 302, Richmond St W</p>
+            <p className="caps sm">M5V 3A8</p>
           </div>
 
           <div className="contact-address">
             <p className="caps sm">Copenhagen</p>
-            <p className="caps sm">984 Dundas St W</p>
-            <p className="caps sm">M6J 1W6</p>
+            <p className="caps sm">Unit 02 Refshalevej 167A</p>
+            <p className="caps sm">1432 KØBENHAVN K</p>
           </div>
         </div>
 
         <div className="contact-copy-links">
-          <p className="caps sm">Studio</p>
-          <p className="caps sm">Archive</p>
-          <p className="caps sm">Work</p>
+          <p className="caps sm">Studio Overview</p>
+          <p className="caps sm">Project Archive</p>
+          <p className="caps sm">Selected Work</p>
         </div>
       </div>
 
