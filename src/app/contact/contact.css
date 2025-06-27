@@ -67,4 +67,9 @@
   .contact-copy {
     padding: 1.5rem;
   }
+
+  .contact-footer {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
 }
