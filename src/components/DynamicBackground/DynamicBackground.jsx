@@ -1,62 +1,48 @@
 "use client";
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef } from "react";
 
-const DynamicBackground = ({ isMenuOpen = false }) => {
+const DynamicBackground = ({
+  isMenuOpen = false,
+  logoPath = "/images/logos/logo_light.png",
+}) => {
   const canvasRef = useRef(null);
   const animationFrameRef = useRef(null);
   const programRef = useRef(null);
   const glRef = useRef(null);
-  const startTimeRef = useRef(null);
-  const mouseTrailRef = useRef([]);
-  const lastMouseMoveRef = useRef(0);
-  const decayFactorRef = useRef(0);
-  const frameCountRef = useRef(0);
-  const isMenuOpenRef = useRef(false);
+  const geometryRef = useRef(null);
+  const particleGridRef = useRef([]);
+  const posArrayRef = useRef(null);
+  const colorArrayRef = useRef(null);
+  const mouseRef = useRef({ x: 0, y: 0 });
+  const execCountRef = useRef(0);
 
-  // Keep original settings for quality
-  const backgroundColor = "#1e1e1e";
-  const patternLight = "#e4e7df";
-  const patternDark = "#e4e7df";
-  const animationSpeed = 1.0;
-  const fluidStrength = 1.8; // Slightly reduced from 2.0
-  const trailLength = 16; // Reduced from 20
-
-  // Update menu state
-  useEffect(() => {
-    isMenuOpenRef.current = isMenuOpen;
-  }, [isMenuOpen]);
-
-  const hexToRgb = useCallback((hex) => {
-    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return result
-      ? {
-          r: parseInt(result[1], 16) / 255,
-          g: parseInt(result[2], 16) / 255,
-          b: parseInt(result[3], 16) / 255,
-        }
-      : null;
-  }, []);
+  const CONFIG = {
+    canvasBg: "#141414",
+    logoSize: 1100,
+    distortionRadius: 3000,
+    forceStrength: 0.003,
+    maxDisplacement: 100,
+    returnForce: 0.025,
+  };
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    // Improved canvas resolution for smoother fluid
-    const dpr = Math.min(window.devicePixelRatio || 1, 1.5); // Increased from 1.25
-    const scale = 1.3; // Increased from 1.2
-    canvas.width = window.innerWidth * dpr * scale;
-    canvas.height = window.innerHeight * dpr * scale;
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = window.innerWidth * dpr;
+    canvas.height = window.innerHeight * dpr;
     canvas.style.width = window.innerWidth + "px";
     canvas.style.height = window.innerHeight + "px";
 
-    const gl =
-      canvas.getContext("webgl", {
-        alpha: false,
-        depth: false,
-        stencil: false,
-        antialias: true, // Enable anti-aliasing for smoother shapes
-        powerPreference: "high-performance",
-      }) || canvas.getContext("experimental-webgl");
+    const gl = canvas.getContext("webgl", {
+      alpha: true,
+      depth: false,
+      stencil: false,
+      antialias: true,
+      powerPreference: "high-performance",
+      premultipliedAlpha: false,
+    });
 
     if (!gl) {
       console.error("WebGL not supported");
@@ -64,121 +50,46 @@ const DynamicBackground = ({ isMenuOpen = false }) => {
     }
 
     glRef.current = gl;
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
+    function hexToRgb(hex) {
+      const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+      return result
+        ? {
+            r: parseInt(result[1], 16) / 255,
+            g: parseInt(result[2], 16) / 255,
+            b: parseInt(result[3], 16) / 255,
+          }
+        : { r: 0, g: 0, b: 0 };
+    }
 
     const vertexShaderSource = `
+      precision highp float;
+      uniform vec2 u_resolution;
       attribute vec2 a_position;
+      attribute vec4 a_color;
+      varying vec4 v_color;
       void main() {
-        gl_Position = vec4(a_position, 0.0, 1.0);
-      }
+         vec2 zeroToOne = a_position / u_resolution;
+         vec2 clipSpace = (zeroToOne * 2.0 - 1.0);
+         v_color = a_color;
+         gl_Position = vec4(clipSpace * vec2(1.0, -1.0), 0.0, 1.0);
+         gl_PointSize = 3.5;
+     }
     `;
 
-    // High precision shader with fallback anti-aliasing
     const fragmentShaderSource = `
-      #ifdef GL_OES_standard_derivatives
-      #extension GL_OES_standard_derivatives : enable
-      #endif
-      
       precision highp float;
-      uniform vec2 iResolution;
-      uniform float iTime;
-      uniform vec3 uBackgroundColor;
-      uniform vec3 uPatternLight;
-      uniform vec3 uPatternDark;
-      uniform float uAnimationSpeed;
-      uniform vec2 uMouseTrail[40];
-      uniform int uTrailLength;
-      uniform float uFluidStrength;
-      uniform float uDecayFactor;
-
-      vec2 hash(vec2 p) {
-        p = vec2(dot(p, vec2(127.1, 311.7)), dot(p, vec2(269.5, 183.3)));
-        return -1.0 + 2.0 * fract(sin(p) * 43758.5453123);
-      }
-
-      float noise(vec2 p) {
-        vec2 i = floor(p);
-        vec2 f = fract(p);
-        vec2 u = f * f * (3.0 - 2.0 * f);
-        return mix(mix(dot(hash(i + vec2(0.0, 0.0)), f - vec2(0.0, 0.0)),
-                       dot(hash(i + vec2(1.0, 0.0)), f - vec2(1.0, 0.0)), u.x),
-                   mix(dot(hash(i + vec2(0.0, 1.0)), f - vec2(0.0, 1.0)),
-                       dot(hash(i + vec2(1.0, 1.0)), f - vec2(1.0, 1.0)), u.x), u.y);
-      }
-
-      vec2 getFluidDisplacement(vec2 pos) {
-        vec2 displacement = vec2(0.0);
-        
-        for (int i = 0; i < 40; i++) {
-          if (i >= uTrailLength) break;
-          
-          vec2 trailPos = (uMouseTrail[i] * 2.0 - iResolution.xy) / iResolution.y;
-          float dist = length(pos - trailPos);
-          
-          if (dist > 1.0) continue;
-          
-          float trailDecay = pow(1.0 - float(i) / float(uTrailLength), 2.0);
-          float spatialDecay = exp(-dist * 2.1);
-          float influence = spatialDecay * trailDecay * pow(uDecayFactor, 0.5);
-          
-          if (influence > 0.006) {
-            vec2 direction = normalize(pos - trailPos + vec2(0.001));
-            float angle = atan(direction.y, direction.x);
-            
-            float noiseVal = noise(pos * 7.5 + iTime * 0.48);
-            angle += noiseVal * 0.48;
-            
-            vec2 flowDir = vec2(cos(angle + 1.57), sin(angle + 1.57));
-            displacement += flowDir * influence * uFluidStrength * 0.048;
-          }
-        }
-        
-        return displacement * smoothstep(0.0, 0.3, uDecayFactor);
-      }
-
-      // Smooth step function with fixed smoothing width
-      float smoothStep(float threshold, float value) {
-        float smoothWidth = 0.002; // Fixed smooth width for consistent anti-aliasing
-        return smoothstep(threshold - smoothWidth, threshold + smoothWidth, value);
-      }
-
-      #define R iResolution 
-      void mainImage(out vec4 O, in vec2 I) {
-        vec2 fluidDisp = getFluidDisplacement(2.*I/R.y - R.xy/R.y);
-        vec2 p = (2.*I/R.y - R.xy/R.y + fluidDisp) * 1.45;
-        
-        float a = max(abs(p.x) + p.y, -p.y) - .48;
-        float t = iTime * 0.148 * uAnimationSpeed;
-        float y = atan(p.x, p.y);
-        
-        vec4 s = .24 * cos(vec4(23.*log(t)*sin(.24*t)/t, 1., 2., 0.) + t - y);
-        vec4 e = s.yzxy;
-        
-        // Use smooth step functions for anti-aliased edges
-        vec4 f = vec4(
-          smoothStep(0.0, a - s.x) * smoothStep(0.0, e.x - a),
-          smoothStep(0.0, a - s.y) * smoothStep(0.0, e.y - a),
-          smoothStep(0.0, a - s.z) * smoothStep(0.0, e.z - a),
-          smoothStep(0.0, a - s.w) * smoothStep(0.0, e.w - a)
-        );
-        
-        vec4 g = (e - .095) * dot(f, 18.5*(s - e));
-        
-        float intensity = .19*g.x + .68*g.y + .065*g.z + g.w;
-        
-        vec3 finalColor;
-        if (intensity > 0.095) {
-          finalColor = mix(uBackgroundColor, uPatternLight, clamp(intensity * 1.05, 0., 1.));
-        } else if (intensity < -0.095) {
-          finalColor = mix(uBackgroundColor, uPatternDark, clamp(-intensity * 1.05, 0., 1.));
-        } else {
-          finalColor = uBackgroundColor;
-        }
-        
-        O = vec4(finalColor, 1.0);
-      }
-
+      varying vec4 v_color;
       void main() {
-        mainImage(gl_FragColor, gl_FragCoord.xy);
+          if (v_color.a < 0.01) discard;
+          
+          vec2 coord = gl_PointCoord - vec2(0.5);
+          float dist = length(coord);
+          float alpha = 1.0 - smoothstep(0.0, 0.5, dist);
+          
+          gl_FragColor = vec4(v_color.rgb, v_color.a * alpha);
       }
     `;
 
@@ -229,177 +140,233 @@ const DynamicBackground = ({ isMenuOpen = false }) => {
       program,
       "a_position"
     );
+    const colorAttributeLocation = gl.getAttribLocation(program, "a_color");
     const resolutionUniformLocation = gl.getUniformLocation(
       program,
-      "iResolution"
-    );
-    const timeUniformLocation = gl.getUniformLocation(program, "iTime");
-    const backgroundColorUniformLocation = gl.getUniformLocation(
-      program,
-      "uBackgroundColor"
-    );
-    const patternLightUniformLocation = gl.getUniformLocation(
-      program,
-      "uPatternLight"
-    );
-    const patternDarkUniformLocation = gl.getUniformLocation(
-      program,
-      "uPatternDark"
-    );
-    const animationSpeedUniformLocation = gl.getUniformLocation(
-      program,
-      "uAnimationSpeed"
-    );
-    const mouseTrailUniformLocation = gl.getUniformLocation(
-      program,
-      "uMouseTrail"
-    );
-    const trailLengthUniformLocation = gl.getUniformLocation(
-      program,
-      "uTrailLength"
-    );
-    const fluidStrengthUniformLocation = gl.getUniformLocation(
-      program,
-      "uFluidStrength"
-    );
-    const decayFactorUniformLocation = gl.getUniformLocation(
-      program,
-      "uDecayFactor"
+      "u_resolution"
     );
 
-    const positionBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-    const positions = [-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1];
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+    const loadLogo = () => {
+      const image = new Image();
+      image.crossOrigin = "anonymous";
 
-    // Balanced mouse throttling for smoother interaction
-    const handleMouseMove = (event) => {
-      const now = Date.now();
-      if (now - lastMouseMoveRef.current < 14) return; // Slightly more responsive
+      image.onload = () => {
+        const tempCanvas = document.createElement("canvas");
+        const tempCtx = tempCanvas.getContext("2d");
+        tempCanvas.width = CONFIG.logoSize;
+        tempCanvas.height = CONFIG.logoSize;
 
-      const rect = canvas.getBoundingClientRect();
-      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-      const scale = 1.3;
+        tempCtx.clearRect(0, 0, CONFIG.logoSize, CONFIG.logoSize);
 
-      const x = (event.clientX - rect.left) * dpr * scale;
-      const y = (rect.height - (event.clientY - rect.top)) * dpr * scale;
+        const scale = 0.9;
+        const scaledSize = CONFIG.logoSize * scale;
+        const offset = (CONFIG.logoSize - scaledSize) / 2;
 
-      lastMouseMoveRef.current = now;
+        tempCtx.drawImage(image, offset, offset, scaledSize, scaledSize);
+        const imageData = tempCtx.getImageData(
+          0,
+          0,
+          CONFIG.logoSize,
+          CONFIG.logoSize
+        );
 
-      mouseTrailRef.current.unshift({ x, y });
+        initParticleSystem(imageData.data, CONFIG.logoSize);
+      };
 
-      if (mouseTrailRef.current.length > trailLength) {
-        mouseTrailRef.current.length = trailLength;
-      }
+      image.onerror = () => {
+        console.error("Failed to load logo image:", logoPath);
+      };
+
+      image.src = logoPath;
     };
 
-    document.addEventListener("mousemove", handleMouseMove, { passive: true });
+    function initParticleSystem(pixels, dim) {
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
 
-    function resizeCanvas() {
-      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-      const scale = 1.3;
-      const displayWidth = canvas.clientWidth;
-      const displayHeight = canvas.clientHeight;
-      const canvasWidth = displayWidth * dpr * scale;
-      const canvasHeight = displayHeight * dpr * scale;
+      particleGridRef.current = [];
+      const validParticles = [];
+      const validPositions = [];
+      const validColors = [];
 
-      if (canvas.width !== canvasWidth || canvas.height !== canvasHeight) {
-        canvas.width = canvasWidth;
-        canvas.height = canvasHeight;
-        canvas.style.width = displayWidth + "px";
-        canvas.style.height = displayHeight + "px";
-        gl.viewport(0, 0, canvas.width, canvas.height);
-      }
-    }
+      for (let i = 0; i < dim; i++) {
+        for (let j = 0; j < dim; j++) {
+          const pixelIndex = (i * dim + j) * 4;
+          const alpha = pixels[pixelIndex + 3];
 
-    // No interference with render loop - let it run completely independently
-    function render(currentTime) {
-      if (!gl || !program) return;
+          if (alpha > 10) {
+            const x = centerX + (j - dim / 2) * 1.0;
+            const y = centerY + (i - dim / 2) * 1.0;
 
-      resizeCanvas();
+            validPositions.push(x, y);
+            validColors.push(
+              pixels[pixelIndex] / 255,
+              pixels[pixelIndex + 1] / 255,
+              pixels[pixelIndex + 2] / 255,
+              pixels[pixelIndex + 3] / 255
+            );
 
-      const time = startTimeRef.current
-        ? (currentTime - startTimeRef.current) / 1000 + 1.0
-        : 1.0;
-
-      const timeSinceLastMove = (currentTime - lastMouseMoveRef.current) / 1000;
-      const targetDecayFactor =
-        timeSinceLastMove < 0.02
-          ? 1.0
-          : Math.max(0, 1.0 - Math.pow((timeSinceLastMove - 0.02) * 1.2, 1.5));
-
-      const lerpSpeed = timeSinceLastMove < 0.1 ? 0.15 : 0.03;
-      decayFactorRef.current +=
-        (targetDecayFactor - decayFactorRef.current) * lerpSpeed;
-
-      gl.clearColor(0, 0, 0, 1);
-      gl.clear(gl.COLOR_BUFFER_BIT);
-
-      gl.useProgram(program);
-
-      const bgColor = hexToRgb(backgroundColor);
-      const lightColor = hexToRgb(patternLight);
-      const darkColor = hexToRgb(patternDark);
-
-      const trailArray = new Float32Array(80); // Reduced from 100
-      const activeTrailLength = Math.min(mouseTrailRef.current.length, 40); // Reduced from 50
-      for (let i = 0; i < activeTrailLength; i++) {
-        trailArray[i * 2] = mouseTrailRef.current[i].x;
-        trailArray[i * 2 + 1] = mouseTrailRef.current[i].y;
+            validParticles.push({
+              ox: x,
+              oy: y,
+              vx: 0,
+              vy: 0,
+            });
+          }
+        }
       }
 
-      gl.uniform2f(resolutionUniformLocation, canvas.width, canvas.height);
-      gl.uniform1f(timeUniformLocation, time);
-      gl.uniform3f(
-        backgroundColorUniformLocation,
-        bgColor.r,
-        bgColor.g,
-        bgColor.b
-      );
-      gl.uniform3f(
-        patternLightUniformLocation,
-        lightColor.r,
-        lightColor.g,
-        lightColor.b
-      );
-      gl.uniform3f(
-        patternDarkUniformLocation,
-        darkColor.r,
-        darkColor.g,
-        darkColor.b
-      );
-      gl.uniform1f(animationSpeedUniformLocation, animationSpeed);
-      gl.uniform2fv(mouseTrailUniformLocation, trailArray);
-      gl.uniform1i(
-        trailLengthUniformLocation,
-        Math.min(mouseTrailRef.current.length, trailLength)
-      );
-      gl.uniform1f(fluidStrengthUniformLocation, fluidStrength);
-      gl.uniform1f(decayFactorUniformLocation, decayFactorRef.current);
+      particleGridRef.current = validParticles;
+      posArrayRef.current = new Float32Array(validPositions);
+      colorArrayRef.current = new Float32Array(validColors);
+
+      const positionBuffer = gl.createBuffer();
+      const colorBuffer = gl.createBuffer();
 
       gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-      gl.enableVertexAttribArray(positionAttributeLocation);
-      gl.vertexAttribPointer(
-        positionAttributeLocation,
-        2,
-        gl.FLOAT,
-        false,
-        0,
-        0
-      );
-      gl.drawArrays(gl.TRIANGLES, 0, 6);
+      gl.bufferData(gl.ARRAY_BUFFER, posArrayRef.current, gl.DYNAMIC_DRAW);
 
-      frameCountRef.current++;
-      animationFrameRef.current = requestAnimationFrame(render);
+      gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+      gl.bufferData(gl.ARRAY_BUFFER, colorArrayRef.current, gl.STATIC_DRAW);
+
+      geometryRef.current = {
+        positionBuffer,
+        colorBuffer,
+        vertexCount: validParticles.length,
+      };
+
+      console.log(`Created ${validParticles.length} particles`);
+      startAnimation();
     }
 
-    startTimeRef.current = performance.now();
-    animationFrameRef.current = requestAnimationFrame(render);
+    function startAnimation() {
+      function animate() {
+        if (!gl || !programRef.current || !geometryRef.current) return;
+
+        if (execCountRef.current > 0) {
+          execCountRef.current -= 1;
+
+          const rad = CONFIG.distortionRadius * CONFIG.distortionRadius;
+          const mx = mouseRef.current.x;
+          const my = mouseRef.current.y;
+
+          for (let i = 0, len = particleGridRef.current.length; i < len; i++) {
+            const x = posArrayRef.current[i * 2];
+            const y = posArrayRef.current[i * 2 + 1];
+            const d = particleGridRef.current[i];
+
+            const dx = mx - x;
+            const dy = my - y;
+            const dis = dx * dx + dy * dy;
+
+            if (dis < rad && dis > 0) {
+              const f = -rad / dis;
+              const t = Math.atan2(dy, dx);
+
+              const distFromOrigin = Math.sqrt(
+                (x - d.ox) * (x - d.ox) + (y - d.oy) * (y - d.oy)
+              );
+
+              const forceMultiplier = Math.max(
+                0.1,
+                1 - distFromOrigin / (CONFIG.maxDisplacement * 2)
+              );
+
+              d.vx += f * Math.cos(t) * CONFIG.forceStrength * forceMultiplier;
+              d.vy += f * Math.sin(t) * CONFIG.forceStrength * forceMultiplier;
+            }
+
+            const newX = x + (d.vx *= 0.82) + (d.ox - x) * CONFIG.returnForce;
+            const newY = y + (d.vy *= 0.82) + (d.oy - y) * CONFIG.returnForce;
+
+            const dx_origin = newX - d.ox;
+            const dy_origin = newY - d.oy;
+            const distFromOrigin = Math.sqrt(
+              dx_origin * dx_origin + dy_origin * dy_origin
+            );
+
+            if (distFromOrigin > CONFIG.maxDisplacement) {
+              const excess = distFromOrigin - CONFIG.maxDisplacement;
+              const scale = CONFIG.maxDisplacement / distFromOrigin;
+              const dampedScale =
+                scale + (1 - scale) * Math.exp(-excess * 0.02);
+
+              posArrayRef.current[i * 2] = d.ox + dx_origin * dampedScale;
+              posArrayRef.current[i * 2 + 1] = d.oy + dy_origin * dampedScale;
+
+              d.vx *= 0.7;
+              d.vy *= 0.7;
+            } else {
+              posArrayRef.current[i * 2] = newX;
+              posArrayRef.current[i * 2 + 1] = newY;
+            }
+          }
+
+          gl.bindBuffer(gl.ARRAY_BUFFER, geometryRef.current.positionBuffer);
+          gl.bufferSubData(gl.ARRAY_BUFFER, 0, posArrayRef.current);
+        }
+
+        const bgColor = hexToRgb(CONFIG.canvasBg);
+        gl.viewport(0, 0, canvas.width, canvas.height);
+        gl.clearColor(bgColor.r, bgColor.g, bgColor.b, 1.0);
+        gl.clear(gl.COLOR_BUFFER_BIT);
+
+        gl.useProgram(programRef.current);
+
+        gl.uniform2f(resolutionUniformLocation, canvas.width, canvas.height);
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, geometryRef.current.positionBuffer);
+        gl.enableVertexAttribArray(positionAttributeLocation);
+        gl.vertexAttribPointer(
+          positionAttributeLocation,
+          2,
+          gl.FLOAT,
+          false,
+          0,
+          0
+        );
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, geometryRef.current.colorBuffer);
+        gl.enableVertexAttribArray(colorAttributeLocation);
+        gl.vertexAttribPointer(
+          colorAttributeLocation,
+          4,
+          gl.FLOAT,
+          false,
+          0,
+          0
+        );
+
+        gl.drawArrays(gl.POINTS, 0, geometryRef.current.vertexCount);
+
+        animationFrameRef.current = requestAnimationFrame(animate);
+      }
+
+      animate();
+    }
+
+    const handleMouseMove = (event) => {
+      const rect = canvas.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+
+      mouseRef.current.x = (event.clientX - rect.left) * dpr;
+      mouseRef.current.y = (event.clientY - rect.top) * dpr;
+      execCountRef.current = 300;
+    };
+
+    document.addEventListener("mousemove", handleMouseMove);
 
     const handleResize = () => {
-      resizeCanvas();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = window.innerWidth * dpr;
+      canvas.height = window.innerHeight * dpr;
+      canvas.style.width = window.innerWidth + "px";
+      canvas.style.height = window.innerHeight + "px";
     };
-    window.addEventListener("resize", handleResize, { passive: true });
+
+    window.addEventListener("resize", handleResize);
+
+    loadLogo();
 
     return () => {
       document.removeEventListener("mousemove", handleMouseMove);
@@ -411,7 +378,7 @@ const DynamicBackground = ({ isMenuOpen = false }) => {
         gl.deleteProgram(programRef.current);
       }
     };
-  }, [hexToRgb]);
+  }, [logoPath]);
 
   return (
     <canvas
@@ -423,10 +390,9 @@ const DynamicBackground = ({ isMenuOpen = false }) => {
         width: "100%",
         height: "100%",
         zIndex: -1,
-        imageRendering: "pixelated",
-        imageRendering: "-moz-crisp-edges",
-        imageRendering: "crisp-edges",
-        willChange: "transform",
+        pointerEvents: "none",
+        backgroundColor: "transparent",
+        mixBlendMode: "normal",
       }}
     />
   );
