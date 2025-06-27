@@ -5,7 +5,7 @@ import ClientLayout from "@/client-layout";
 import { ViewTransitions } from "next-view-transitions";
 
 export const metadata = {
-  title: "WuWei Studio",
+  title: "WuWei Studio — Codegrid",
   description: "Creative Studio Website Template — Codegrid",
 };
 
