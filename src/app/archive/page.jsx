@@ -46,10 +46,10 @@ const Archive = () => {
     gsap.to(images, {
       scale: 1,
       delay: 1,
-      opacity: 1,
+      opacity: 0.2,
       duration: 0.5,
       stagger: {
-        amount: isMobile ? 1 : 1.5,
+        amount: isMobile ? 1 : 1,
         grid: [totalRows, imagesPerRow],
         from: "random",
       },
@@ -76,6 +76,7 @@ const Archive = () => {
         gsap.to(img, {
           x: distX * zoomDistX,
           y: distY * zoomDistY,
+          opacity: 1,
           scale: zoomScale,
           duration: 2.5,
           ease: "power4.inOut",
