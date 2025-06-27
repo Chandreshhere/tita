@@ -109,7 +109,7 @@ const page = () => {
                 between chaos and control.
               </p>
 
-              <div className="hero-link">
+              <div className="sp-link">
                 <AnimeLink route="/" label="Live Demo" />
               </div>
             </div>
@@ -170,7 +170,7 @@ const page = () => {
 
       <section className="sp-next-project">
         <div className="sp-next-project-copy">
-          <p className="sm caps mono">More Projects</p>
+          <p className="sm">(More Projects)</p>
           <div className="sp-next-project-names">
             <h1>Hidden Signal</h1>
           </div>

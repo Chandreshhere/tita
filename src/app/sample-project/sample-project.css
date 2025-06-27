@@ -111,3 +111,28 @@
   width: 100%;
   text-align: center;
 }
+
+@media (max-width: 1000px) {
+  .sp-year {
+    display: none;
+  }
+
+  .sp-info .sp-col-sm {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .sp-copy-wrapper {
+    flex-direction: column;
+    gap: 3rem;
+  }
+
+  .sp-copy-title,
+  .sp-copy-description {
+    width: 100%;
+  }
+
+  .sp-images-container {
+    width: 85%;
+  }
+}
