@@ -10,29 +10,29 @@ gsap.registerPlugin(ScrollTrigger);
 const ProcessCards = () => {
   const processCardsData = [
     {
-      index: "(01)",
-      title: "Laying the Groundwork",
+      index: "01",
+      title: "Purpose",
       image: "/images/process/process-1.jpg",
       description:
         "We begin with intent. Understanding your goals, audience, and vision sets the foundation for everything to come.",
     },
     {
-      index: "(02)",
-      title: "Shaping the Experience",
+      index: "02",
+      title: "Roadmap",
       image: "/images/process/process-2.jpg",
       description:
         "Structure meets story. We sketch the flow, architecture, and interactions to ensure the experience feels effortless.",
     },
     {
-      index: "(03)",
-      title: "Bringing Form to Function",
+      index: "03",
+      title: "Development",
       image: "/images/process/process-3.jpg",
       description:
         "Design and development work in harmony. Every element is crafted to feel natural, refined, and purpose-built.",
     },
     {
-      index: "(04)",
-      title: "Releasing into the Wild",
+      index: "04",
+      title: "Launch",
       image: "/images/process/process-4.jpg",
       description:
         "After rigorous testing and polish, we deploy with precision. Your site goes live—stable, scalable, and ready to grow.",
@@ -86,7 +86,7 @@ const ProcessCards = () => {
           </div>
           <div className="process-card-content">
             <div className="process-card-content-wrapper">
-              <h2 className="caps process-card-header">{cardData.title}</h2>
+              <h1 className="process-card-header">{cardData.title}</h1>
 
               <div className="process-card-img">
                 <img src={cardData.image} alt="" />

@@ -2,7 +2,7 @@
   position: relative;
   width: 100vw;
   height: 100svh;
-  background-color: var(--foreground);
+  background-color: var(--background);
   overflow: hidden;
 }
 
@@ -10,7 +10,7 @@
   position: relative;
   width: 100vw;
   height: 100svh;
-  background-color: var(--background);
+  background-color: var(--foreground);
   clip-path: circle(0% at 50% 50%);
   will-change: clip-path;
   overflow: hidden;
@@ -35,7 +35,7 @@
 .whoweare .whoweare-header h1 {
   text-transform: uppercase;
   font-size: 55vw;
-  color: var(--foreground);
+  color: var(--background);
 }
 
 .whoweare-img {
