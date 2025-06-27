@@ -133,22 +133,24 @@ const page = () => {
         gsap.set(highlighter, { scaleX: 0 });
       });
 
-      const workYears = workRef.current.querySelectorAll(".work-year");
-      workYears.forEach((workYear) => {
-        ScrollTrigger.create({
-          trigger: workYear,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: true,
-          onUpdate: (self) => {
-            gsap.to(workYear, {
-              y: self.progress * -100,
-              duration: 0.3,
-              ease: "none",
-            });
-          },
+      if (window.innerWidth > 1000) {
+        const workYears = workRef.current.querySelectorAll(".work-year");
+        workYears.forEach((workYear) => {
+          ScrollTrigger.create({
+            trigger: workYear,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true,
+            onUpdate: (self) => {
+              gsap.to(workYear, {
+                y: self.progress * -100,
+                duration: 0.3,
+                ease: "none",
+              });
+            },
+          });
         });
-      });
+      }
     },
     { scope: workRef }
   );

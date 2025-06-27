@@ -118,10 +118,11 @@ export const portfolio = [
     year: "2022",
     projects: [
       {
-        name: "Core-9",
-        tags: "art direction, identity",
-        img: "/images/work/work_021.jpeg",
+        name: "Timefold 22",
+        tags: "creative direction, design",
+        img: "/images/work/work_006.jpeg",
       },
+
       {
         name: "CTRL V",
         tags: "web, creative direction",
@@ -183,9 +184,9 @@ export const portfolio = [
     year: "2019",
     projects: [
       {
-        name: "Timefold 22",
-        tags: "creative direction, design",
-        img: "/images/work/work_006.jpeg",
+        name: "Core-9",
+        tags: "art direction, identity",
+        img: "/images/work/work_021.jpeg",
       },
       {
         name: "Void / Dust",

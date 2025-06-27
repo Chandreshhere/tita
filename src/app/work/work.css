@@ -11,7 +11,7 @@
 
 .work-main {
   flex: 3;
-  margin: 25svh 0 5svh 0;
+  margin: 17.5svh 0 5svh 0;
 }
 
 .work-container {
@@ -63,7 +63,7 @@
 
 .year-indices {
   position: fixed;
-  top: 25svh;
+  top: 30svh;
   left: 1.5rem;
   display: flex;
   flex-direction: column;
@@ -102,4 +102,20 @@
 
 .year-index.year-index-var-3 {
   margin-left: 1rem;
+}
+
+@media (max-width: 1000px) {
+  .work-projects-container {
+    grid-template-columns: 1fr;
+  }
+
+  .work-year {
+    top: 0;
+    left: 0;
+    margin-bottom: 1.5rem;
+  }
+
+  .year-indices {
+    top: 12.5svh;
+  }
 }

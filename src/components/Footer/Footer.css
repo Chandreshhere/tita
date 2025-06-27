@@ -33,3 +33,9 @@
   margin-bottom: 1.5rem;
   color: var(--foreground-200);
 }
+
+@media (max-width: 1000px) {
+  .fs-col-lg {
+    display: none;
+  }
+}
