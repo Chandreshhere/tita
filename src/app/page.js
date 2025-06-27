@@ -9,17 +9,14 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 import DynamicBackground from "@/components/DynamicBackground/DynamicBackground";
+import AnimeLink from "@/components/AnimeLink/AnimeLink";
 
 export default function Home() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-
   return (
     <>
       <section className="hero">
-        <DynamicBackground
-          isMenuOpen={isMenuOpen}
-          logoPath="/images/logos/logo_light.png"
-        />
+        <DynamicBackground logoPath="/images/logos/logo_light.png" />
+
         <div className="hero-content">
           <div className="hero-header">
             <div className="hero-header-col-lg"></div>
@@ -45,7 +42,7 @@ export default function Home() {
               </div>
 
               <div className="hero-link">
-                <p className="sm caps mono">View Work</p>
+                <AnimeLink route="/contact" label="contact" />
               </div>
             </div>
           </div>

@@ -36,6 +36,7 @@ h1,
 h2,
 h3 {
   line-height: 1.1;
+  user-select: none;
 }
 
 h1 {
@@ -61,10 +62,12 @@ p,
 a {
   font-size: clamp(1.075rem, 0.325rem + 0.825vw, 2rem);
   font-weight: 500;
+  user-select: none;
 }
 
 a {
   text-decoration: none;
+  color: var(--foreground);
 }
 
 p.sm,

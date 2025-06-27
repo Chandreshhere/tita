@@ -1,10 +1,7 @@
 "use client";
 import { useEffect, useRef } from "react";
 
-const DynamicBackground = ({
-  isMenuOpen = false,
-  logoPath = "/images/logos/logo_light.png",
-}) => {
+const DynamicBackground = ({ logoPath = "/images/logos/logo_light.png" }) => {
   const canvasRef = useRef(null);
   const animationFrameRef = useRef(null);
   const programRef = useRef(null);
@@ -15,6 +12,7 @@ const DynamicBackground = ({
   const colorArrayRef = useRef(null);
   const mouseRef = useRef({ x: 0, y: 0 });
   const execCountRef = useRef(0);
+  const isCleanedUpRef = useRef(false);
 
   const CONFIG = {
     canvasBg: "#141414",
@@ -28,6 +26,8 @@ const DynamicBackground = ({
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
+
+    isCleanedUpRef.current = false;
 
     const dpr = window.devicePixelRatio || 1;
     canvas.width = window.innerWidth * dpr;
@@ -94,7 +94,11 @@ const DynamicBackground = ({
     `;
 
     function createShader(gl, type, source) {
+      if (!gl || isCleanedUpRef.current) return null;
+
       const shader = gl.createShader(type);
+      if (!shader) return null;
+
       gl.shaderSource(shader, source);
       gl.compileShader(shader);
 
@@ -108,7 +112,12 @@ const DynamicBackground = ({
     }
 
     function createProgram(gl, vertexShader, fragmentShader) {
+      if (!gl || !vertexShader || !fragmentShader || isCleanedUpRef.current)
+        return null;
+
       const program = gl.createProgram();
+      if (!program) return null;
+
       gl.attachShader(program, vertexShader);
       gl.attachShader(program, fragmentShader);
       gl.linkProgram(program);
@@ -151,6 +160,8 @@ const DynamicBackground = ({
       image.crossOrigin = "anonymous";
 
       image.onload = () => {
+        if (isCleanedUpRef.current) return;
+
         const tempCanvas = document.createElement("canvas");
         const tempCtx = tempCanvas.getContext("2d");
         tempCanvas.width = CONFIG.logoSize;
@@ -181,6 +192,8 @@ const DynamicBackground = ({
     };
 
     function initParticleSystem(pixels, dim) {
+      if (isCleanedUpRef.current) return;
+
       const centerX = canvas.width / 2;
       const centerY = canvas.height / 2;
 
@@ -241,7 +254,14 @@ const DynamicBackground = ({
 
     function startAnimation() {
       function animate() {
-        if (!gl || !programRef.current || !geometryRef.current) return;
+        if (
+          isCleanedUpRef.current ||
+          !gl ||
+          !programRef.current ||
+          !geometryRef.current
+        ) {
+          return;
+        }
 
         if (execCountRef.current > 0) {
           execCountRef.current -= 1;
@@ -346,6 +366,8 @@ const DynamicBackground = ({
     }
 
     const handleMouseMove = (event) => {
+      if (isCleanedUpRef.current) return;
+
       const rect = canvas.getBoundingClientRect();
       const dpr = window.devicePixelRatio || 1;
 
@@ -354,29 +376,86 @@ const DynamicBackground = ({
       execCountRef.current = 300;
     };
 
-    document.addEventListener("mousemove", handleMouseMove);
-
     const handleResize = () => {
+      if (isCleanedUpRef.current) return;
+
       const dpr = window.devicePixelRatio || 1;
       canvas.width = window.innerWidth * dpr;
       canvas.height = window.innerHeight * dpr;
       canvas.style.width = window.innerWidth + "px";
       canvas.style.height = window.innerHeight + "px";
+
+      if (geometryRef.current && particleGridRef.current.length > 0) {
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        const dim = Math.sqrt(particleGridRef.current.length);
+
+        for (let i = 0; i < particleGridRef.current.length; i++) {
+          const row = Math.floor(i / dim);
+          const col = i % dim;
+          const newX = centerX + (col - dim / 2) * 1.0;
+          const newY = centerY + (row - dim / 2) * 1.0;
+
+          particleGridRef.current[i].ox = newX;
+          particleGridRef.current[i].oy = newY;
+          posArrayRef.current[i * 2] = newX;
+          posArrayRef.current[i * 2 + 1] = newY;
+        }
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, geometryRef.current.positionBuffer);
+        gl.bufferSubData(gl.ARRAY_BUFFER, 0, posArrayRef.current);
+      }
     };
 
+    document.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("resize", handleResize);
 
     loadLogo();
 
     return () => {
-      document.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("resize", handleResize);
+      isCleanedUpRef.current = true;
+
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
+        animationFrameRef.current = null;
       }
-      if (gl && programRef.current) {
-        gl.deleteProgram(programRef.current);
+
+      document.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("resize", handleResize);
+
+      if (gl && !gl.isContextLost()) {
+        try {
+          if (geometryRef.current) {
+            if (geometryRef.current.positionBuffer) {
+              gl.deleteBuffer(geometryRef.current.positionBuffer);
+            }
+            if (geometryRef.current.colorBuffer) {
+              gl.deleteBuffer(geometryRef.current.colorBuffer);
+            }
+            geometryRef.current = null;
+          }
+
+          if (programRef.current) {
+            const shaders = gl.getAttachedShaders(programRef.current);
+            if (shaders) {
+              shaders.forEach((shader) => {
+                gl.detachShader(programRef.current, shader);
+                gl.deleteShader(shader);
+              });
+            }
+            gl.deleteProgram(programRef.current);
+            programRef.current = null;
+          }
+        } catch (error) {
+          console.warn("Error during WebGL cleanup:", error);
+        }
       }
+
+      particleGridRef.current = [];
+      posArrayRef.current = null;
+      colorArrayRef.current = null;
+      mouseRef.current = { x: 0, y: 0 };
+      execCountRef.current = 0;
     };
   }, [logoPath]);
 
