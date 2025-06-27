@@ -1,0 +1,34 @@
+.footer {
+  position: relative;
+  width: 100vw;
+  padding: 1.5rem 1.5rem 1.5rem 1.5rem;
+  background-color: var(--background);
+  color: var(--foreground);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 4.5rem;
+}
+
+.footer-socials,
+.footer-copy {
+  display: flex;
+  gap: 3rem;
+}
+
+.fs-col-lg,
+.fc-col-lg {
+  flex: 2;
+}
+
+.fs-col-sm,
+.fc-col-sm {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.fs-header {
+  margin-bottom: 1.5rem;
+  color: var(--foreground-200);
+}

@@ -3,6 +3,8 @@ import "./work.css";
 import { portfolio } from "./portfolio";
 import { useTransitionRouter } from "next-view-transitions";
 
+import Footer from "@/components/Footer/Footer";
+
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -152,47 +154,54 @@ const page = () => {
   );
 
   return (
-    <div className="work" ref={workRef}>
-      <div className="year-indices">
-        {portfolio.map((yearData, yearIndex) => (
-          <div
-            key={yearIndex}
-            className={`year-index year-index-var-${(yearIndex % 3) + 1}`}
-          >
-            <p className="sm">{yearData.year.slice(-2)}</p>
-            <div className="year-index-highlighter"></div>
-          </div>
-        ))}
-      </div>
-      <div className="work-sidebar"></div>
-      <div className="work-main">
-        {portfolio.map((yearData, yearIndex) => (
-          <div key={yearIndex} className="work-container">
-            <div className="work-year-container">
-              <h1 className="work-year">'{yearData.year.slice(-2)}</h1>
+    <>
+      <div className="work" ref={workRef}>
+        <div className="year-indices">
+          {portfolio.map((yearData, yearIndex) => (
+            <div
+              key={yearIndex}
+              className={`year-index year-index-var-${(yearIndex % 3) + 1}`}
+            >
+              <p className="sm">{yearData.year.slice(-2)}</p>
+              <div className="year-index-highlighter"></div>
             </div>
-            <div className="work-projects-container">
-              {yearData.projects.map((project, projectIndex) => (
-                <div
-                  key={projectIndex}
-                  className="work-project"
-                  onClick={navigateToProject}
-                  style={{ cursor: "pointer" }}
-                >
-                  <div className="work-project-img">
-                    <img src={project.img} alt={project.name} />
+          ))}
+        </div>
+        <div className="work-sidebar"></div>
+        <div className="work-main">
+          {portfolio.map((yearData, yearIndex) => (
+            <div key={yearIndex} className="work-container">
+              <div className="work-year-container">
+                <h1 className="work-year">'{yearData.year.slice(-2)}</h1>
+              </div>
+              <div className="work-projects-container">
+                {yearData.projects.map((project, projectIndex) => (
+                  <div
+                    key={projectIndex}
+                    className="work-project"
+                    onClick={navigateToProject}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <div className="work-project-img">
+                      <img src={project.img} alt={project.name} />
+                    </div>
+                    <div className="work-project-info">
+                      <p className="sm work-project-info-name">
+                        {project.name}
+                      </p>
+                      <p className="sm work-project-info-tags">
+                        {project.tags}
+                      </p>
+                    </div>
                   </div>
-                  <div className="work-project-info">
-                    <p className="sm work-project-info-name">{project.name}</p>
-                    <p className="sm work-project-info-tags">{project.tags}</p>
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
-    </div>
+      <Footer />
+    </>
   );
 };
 
