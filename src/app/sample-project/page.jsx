@@ -34,7 +34,12 @@ const page = () => {
           counter.textContent = progress;
 
           const containerHeight = progressContainer.offsetHeight;
-          const moveDistance = window.innerHeight + containerHeight;
+
+          const isMobile = window.innerWidth < 1000;
+          const baseDistance = window.innerHeight + containerHeight;
+          const mobileMultiplier = isMobile ? 1.5 : 1;
+          const moveDistance = baseDistance * mobileMultiplier;
+
           gsap.to(progressContainer, {
             y: -self.progress * moveDistance,
             duration: 0.1,
@@ -87,7 +92,7 @@ const page = () => {
         <div className="sp-copy-wrapper">
           <div className="sp-col-lg">
             <div className="sp-copy-title">
-              <h3>A Study in Temporal Flow and Modular Kinetics</h3>
+              <h3>Exploring Motion Through Structured Design</h3>
             </div>
           </div>
           <div className="sp-col-sm">
