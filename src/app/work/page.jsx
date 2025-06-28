@@ -9,6 +9,7 @@ import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { useRef } from "react";
+import Copy from "@/components/Copy/Copy";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -65,6 +66,18 @@ const page = () => {
       const workContainers =
         workRef.current.querySelectorAll(".work-container");
       const yearIndices = document.querySelectorAll(".year-index");
+      let initialAnimationComplete = false;
+
+      const workProjects = workRef.current.querySelectorAll(".work-project");
+      gsap.set(workProjects, { y: 100, opacity: 0 });
+      gsap.to(workProjects, {
+        y: 0,
+        opacity: 1,
+        stagger: 0.05,
+        delay: 0.85,
+        duration: 1,
+        ease: "power3.out",
+      });
 
       workContainers.forEach((container, index) => {
         ScrollTrigger.create({
@@ -72,6 +85,8 @@ const page = () => {
           start: "top 50%",
           end: "bottom 50%",
           onEnter: () => {
+            if (!initialAnimationComplete) return;
+
             yearIndices.forEach((yearIndex, i) => {
               yearIndex.classList.remove("active");
               const highlighter = yearIndex.querySelector(
@@ -99,6 +114,8 @@ const page = () => {
             }
           },
           onEnterBack: () => {
+            if (!initialAnimationComplete) return;
+
             yearIndices.forEach((yearIndex, i) => {
               yearIndex.classList.remove("active");
               const highlighter = yearIndex.querySelector(
@@ -133,6 +150,35 @@ const page = () => {
         gsap.set(highlighter, { scaleX: 0 });
       });
 
+      setTimeout(() => {
+        let activeIndex = 0;
+        workContainers.forEach((container, index) => {
+          const rect = container.getBoundingClientRect();
+          const containerCenter = rect.top + rect.height / 2;
+          const viewportCenter = window.innerHeight / 2;
+
+          if (containerCenter <= viewportCenter) {
+            activeIndex = index;
+          }
+        });
+
+        if (yearIndices[activeIndex]) {
+          yearIndices[activeIndex].classList.add("active");
+          const highlighter = yearIndices[activeIndex].querySelector(
+            ".year-index-highlighter"
+          );
+          gsap.to(highlighter, {
+            scaleX: 1,
+            transformOrigin: "left",
+            duration: 0.3,
+            ease: "power2.out",
+            onComplete: () => {
+              initialAnimationComplete = true;
+            },
+          });
+        }
+      }, 1000);
+
       if (window.innerWidth > 1000) {
         const workYears = workRef.current.querySelectorAll(".work-year");
         workYears.forEach((workYear) => {
@@ -164,7 +210,9 @@ const page = () => {
               key={yearIndex}
               className={`year-index year-index-var-${(yearIndex % 3) + 1}`}
             >
-              <p className="sm">{yearData.year.slice(-2)}</p>
+              <Copy delay={0.85}>
+                <p className="sm">{yearData.year.slice(-2)}</p>
+              </Copy>
               <div className="year-index-highlighter"></div>
             </div>
           ))}
@@ -174,7 +222,9 @@ const page = () => {
           {portfolio.map((yearData, yearIndex) => (
             <div key={yearIndex} className="work-container">
               <div className="work-year-container">
-                <h1 className="work-year">'{yearData.year.slice(-2)}</h1>
+                <Copy delay={0.85} animateOnScroll={false}>
+                  <h1 className="work-year">'{yearData.year.slice(-2)}</h1>
+                </Copy>
               </div>
               <div className="work-projects-container">
                 {yearData.projects.map((project, projectIndex) => (

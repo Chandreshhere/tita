@@ -24,6 +24,7 @@
   left: -7rem;
   transform: translateY(0%);
   will-change: transform;
+  z-index: 1;
 }
 
 .work-projects-container {

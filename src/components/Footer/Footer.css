@@ -38,6 +38,14 @@
   color: var(--foreground);
 }
 
+.footer-text {
+  overflow: hidden;
+}
+
+.footer-text-content {
+  display: inline-block;
+}
+
 @media (max-width: 1000px) {
   .fs-col-lg {
     display: none;

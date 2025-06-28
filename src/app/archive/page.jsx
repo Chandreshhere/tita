@@ -46,7 +46,7 @@ const Archive = () => {
     gsap.to(images, {
       scale: 1,
       delay: 1,
-      opacity: 0.2,
+      opacity: 0.3,
       duration: 0.5,
       stagger: {
         amount: isMobile ? 1 : 1,

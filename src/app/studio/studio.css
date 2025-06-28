@@ -17,7 +17,7 @@
 }
 
 .studio-hero h1 {
-  font-size: 56vw;
+  font-size: 50vw;
   position: relative;
 }
 
@@ -100,6 +100,16 @@
 
 .recognition-copy p {
   color: var(--foreground-200);
+}
+
+.char {
+  display: inline-block;
+  letter-spacing: 0;
+}
+
+.char-mask {
+  overflow: hidden;
+  display: inline-block;
 }
 
 @media (max-width: 1000px) {
