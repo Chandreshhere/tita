@@ -1,16 +1,17 @@
 "use client";
 import "./studio.css";
 import { useRef } from "react";
+
+import Copy from "@/components/Copy/Copy";
+import BtnLink from "@/components/BtnLink/BtnLink";
+import WhoWeAre from "@/components/WhoWeAre/WhoWeAre";
+import ProcessCards from "@/components/ProcessCards/ProcessCards";
+import Footer from "@/components/Footer/Footer";
+
 import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
-
-import WhoWeAre from "@/components/WhoWeAre/WhoWeAre";
-import ProcessCards from "@/components/ProcessCards/ProcessCards";
-import BtnLink from "@/components/BtnLink/BtnLink";
-import Footer from "@/components/Footer/Footer";
-import Copy from "@/components/Copy/Copy";
 
 gsap.registerPlugin(SplitText, ScrollTrigger);
 
@@ -65,7 +66,6 @@ const page = () => {
       });
     }
 
-    // Animate mission link after Copy animation completes
     if (missionLinkWrapper) {
       gsap.set(missionLinkWrapper, { y: 30, opacity: 0 });
 

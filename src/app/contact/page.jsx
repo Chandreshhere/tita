@@ -1,11 +1,12 @@
 "use client";
 import "./contact.css";
-import { useTransitionRouter } from "next-view-transitions";
 import { useRef } from "react";
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
 
 import Copy from "@/components/Copy/Copy";
+
+import { useTransitionRouter } from "next-view-transitions";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 
 const page = () => {
   const router = useTransitionRouter();
@@ -18,7 +19,6 @@ const page = () => {
         ".contact-footer .footer-text"
       );
 
-      // Animate contact image clip-path after 0.85 seconds
       gsap.set(contactImg, {
         clipPath: "polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)",
       });
@@ -30,7 +30,6 @@ const page = () => {
         ease: "power3.out",
       });
 
-      // Set initial state for footer text - text moved down and masked
       footerTexts.forEach((element) => {
         const textContent = element.querySelector(".footer-text-content");
         gsap.set(textContent, {
@@ -38,7 +37,6 @@ const page = () => {
         });
       });
 
-      // Animate footer text with delay
       footerTexts.forEach((element, index) => {
         const textContent = element.querySelector(".footer-text-content");
         gsap.to(textContent, {

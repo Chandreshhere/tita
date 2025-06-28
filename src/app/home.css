@@ -61,13 +61,14 @@
   overflow: hidden;
   z-index: 10000000;
   background-color: var(--background-200);
+  pointer-events: none;
 }
 
 .progress-bar {
   position: fixed;
   top: 0;
   right: 0;
-  width: 0.4rem;
+  width: 0.45rem;
   height: 100svh;
   background-color: var(--foreground);
   display: flex;

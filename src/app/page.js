@@ -2,17 +2,17 @@
 import "./home.css";
 import { useState, useEffect } from "react";
 
+import DynamicBackground from "@/components/DynamicBackground/DynamicBackground";
+import Copy from "@/components/Copy/Copy";
+import BtnLink from "@/components/BtnLink/BtnLink";
+
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import CustomEase from "gsap/CustomEase";
-import Copy from "@/components/Copy/Copy";
 
 gsap.registerPlugin(ScrollTrigger, CustomEase);
 CustomEase.create("hop", "0.9, 0, 0.1, 1");
-
-import DynamicBackground from "@/components/DynamicBackground/DynamicBackground";
-import BtnLink from "@/components/BtnLink/BtnLink";
 
 let isInitialLoad = true;
 

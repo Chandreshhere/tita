@@ -15,7 +15,7 @@
 .anime-link-icon {
   width: 4rem;
   height: 1.25rem;
-  background-color: #ffc22a;
+  background-color: var(--btn-icon);
   border-radius: 5rem;
   display: flex;
   justify-content: center;

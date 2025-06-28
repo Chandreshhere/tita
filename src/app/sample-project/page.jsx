@@ -1,16 +1,15 @@
 "use client";
 import "./sample-project.css";
+import { useRef } from "react";
+
+import Copy from "@/components/Copy/Copy";
+import BtnLink from "@/components/BtnLink/BtnLink";
 
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
-import { useRef } from "react";
-
-import Copy from "@/components/Copy/Copy";
 
 gsap.registerPlugin(ScrollTrigger);
-
-import BtnLink from "@/components/BtnLink/BtnLink";
 
 const page = () => {
   const sampleProjectRef = useRef(null);

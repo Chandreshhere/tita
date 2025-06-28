@@ -2,10 +2,10 @@
 import "./Menu.css";
 import { useRef, useState, useEffect } from "react";
 
+import { useTransitionRouter } from "next-view-transitions";
 import gsap from "gsap";
 import CustomEase from "gsap/CustomEase";
 import { useGSAP } from "@gsap/react";
-import { useTransitionRouter } from "next-view-transitions";
 
 gsap.registerPlugin(CustomEase);
 CustomEase.create("hop", ".15, 1, .25, 1");

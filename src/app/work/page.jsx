@@ -1,15 +1,15 @@
 "use client";
 import "./work.css";
 import { portfolio } from "./portfolio";
-import { useTransitionRouter } from "next-view-transitions";
+import { useRef } from "react";
 
+import Copy from "@/components/Copy/Copy";
 import Footer from "@/components/Footer/Footer";
 
+import { useTransitionRouter } from "next-view-transitions";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
-import { useRef } from "react";
-import Copy from "@/components/Copy/Copy";
 
 gsap.registerPlugin(ScrollTrigger);
 

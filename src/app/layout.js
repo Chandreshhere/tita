@@ -6,7 +6,7 @@ import { ViewTransitions } from "next-view-transitions";
 
 export const metadata = {
   title: "WuWei Studio — Codegrid",
-  description: "Creative Studio Website Template — Codegrid",
+  description: "Creative Studio MWT Website Template — Codegrid",
 };
 
 export default function RootLayout({ children }) {

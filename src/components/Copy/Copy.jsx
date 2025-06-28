@@ -1,5 +1,5 @@
 "use client";
-
+import "./Copy.css";
 import React, { useRef } from "react";
 
 import gsap from "gsap";
