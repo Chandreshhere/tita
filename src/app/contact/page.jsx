@@ -144,14 +144,14 @@ const page = () => {
 
         <div className="contact-copy-links">
           <Copy delay={1.75}>
+            <a href="/" onClick={(e) => handleNavigation(e, "/")}>
+              <p className="caps sm">Home</p>
+            </a>
             <a href="/studio" onClick={(e) => handleNavigation(e, "/studio")}>
-              <p className="caps sm">Studio</p>
+              <p className="caps sm">Service</p>
             </a>
             <a href="/work" onClick={(e) => handleNavigation(e, "/work")}>
-              <p className="caps sm">Compositions</p>
-            </a>
-            <a href="/archive" onClick={(e) => handleNavigation(e, "/archive")}>
-              <p className="caps sm">Archive</p>
+              <p className="caps sm">Portfolio</p>
             </a>
           </Copy>
         </div>

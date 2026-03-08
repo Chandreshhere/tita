@@ -5,6 +5,7 @@
   background-color: #000;
   color: var(--foreground);
   overflow: hidden;
+  z-index: 2;
 }
 
 .patron-label {
