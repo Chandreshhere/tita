@@ -6,6 +6,21 @@
   overflow: hidden;
 }
 
+.hero-title {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+.hero-title h1 {
+  font-size: clamp(5rem, 4rem + 12vw, 18rem);
+  letter-spacing: -0.05em;
+  color: var(--foreground);
+  line-height: 0.85;
+}
+
 .hero-header {
   position: absolute;
   top: 25svh;

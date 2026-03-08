@@ -51,7 +51,7 @@
 
 .patron-row {
   position: relative;
-  padding-left: 3vw;
+  padding-left: 1vw;
 }
 
 .patron-char {
@@ -153,7 +153,7 @@
   }
 
   .patron-row {
-    padding-left: 2vw;
+    padding-left: 0.5vw;
   }
 
   .patron-names {

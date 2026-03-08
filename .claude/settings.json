@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm view next-view-transitions versions --json)",
+      "Bash(npm view next-view-transitions@0.3.5 peerDependencies --json)",
+      "Bash(node --version)",
+      "Read(//Users/moon/**)",
+      "Bash(~/.zshrc)"
+    ],
+    "additionalDirectories": [
+      "/Users/moon/Desktop/wu-wei/.next/cache"
+    ]
+  }
+}

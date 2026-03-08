@@ -90,7 +90,7 @@ const page = () => {
     <>
       <div className="studio" ref={studioRef}>
         <section className="studio-hero">
-          <h1 className="caps">Wu</h1>
+          <h1 className="caps">Tita</h1>
         </section>
 
         <section className="studio-hero-img">

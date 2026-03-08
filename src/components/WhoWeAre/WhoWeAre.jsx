@@ -90,19 +90,19 @@ const WhoWeAre = () => {
           </div>
 
           <div className="whoweare-img" id="whoweare-img-1">
-            <img src="/images/who-we-are/team-1.jpg" alt="" loading="lazy" />
+            <img src="/1.jpeg" alt="" loading="lazy" />
           </div>
           <div className="whoweare-img" id="whoweare-img-2">
-            <img src="/images/who-we-are/team-2.jpg" alt="" loading="lazy" />
+            <img src="/2.jpeg" alt="" loading="lazy" />
           </div>
           <div className="whoweare-img" id="whoweare-img-3">
-            <img src="/images/who-we-are/team-3.jpg" alt="" loading="lazy" />
+            <img src="/3.jpeg" alt="" loading="lazy" />
           </div>
           <div className="whoweare-img" id="whoweare-img-4">
-            <img src="/images/who-we-are/team-4.jpg" alt="" loading="lazy" />
+            <img src="/4.jpeg" alt="" loading="lazy" />
           </div>
           <div className="whoweare-img" id="whoweare-img-5">
-            <img src="/images/who-we-are/team-5.jpg" alt="" loading="lazy" />
+            <img src="/5.jpeg" alt="" loading="lazy" />
           </div>
         </div>
       </div>

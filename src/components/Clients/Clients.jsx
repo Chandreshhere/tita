@@ -360,21 +360,19 @@ const Clients = () => {
           } else if (p < enterEnd) {
             // All circles enter from right, converging to the same x (maxRight)
             const ep = (p - enterStart) / (enterEnd - enterStart);
-            const ee = easeOut(ep);
             const startX = window.innerWidth + 100;
-            const currentX = startX + (maxRight - startX) * ee;
-            circle.style.transform = `translate(${currentX}px, -50%) rotate(${(1 - ee) * 540}deg)`;
-            circle.style.opacity = ee;
+            const currentX = startX + (maxRight - startX) * ep;
+            circle.style.transform = `translate(${currentX}px, -50%) rotate(${(1 - ep) * 540}deg)`;
+            circle.style.opacity = Math.min(ep * 3, 1);
             name.style.clipPath = "none";
           } else if (p < rollEnd) {
-            // All circles roll from right to left together
+            // All circles roll from right to left together (linear speed)
             const rp = (p - rollStart) / (rollEnd - rollStart);
-            const re = easeOut(rp);
             const endX = -circleW - 50;
-            const currentX = maxRight + (endX - maxRight) * re;
+            const currentX = maxRight + (endX - maxRight) * rp;
             const circleCenter = currentX + circleW / 2;
 
-            circle.style.transform = `translate(${currentX}px, -50%) rotate(${-re * 720}deg)`;
+            circle.style.transform = `translate(${currentX}px, -50%) rotate(${-rp * 720}deg)`;
             circle.style.opacity = 1;
 
             // Clip each text row as the circle passes over it
