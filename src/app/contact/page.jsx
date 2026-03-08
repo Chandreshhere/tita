@@ -105,48 +105,53 @@ const page = () => {
       <div className="contact-copy">
         <div className="contact-copy-bio">
           <Copy delay={1}>
-            <p className="caps sm">Wu Wei Studios</p>
-            <p className="caps sm">Toronto / Copenhagen</p>
+            <p className="caps sm">TITA — This Is That Agency</p>
+            <p className="caps sm">Art. Intelligence. Impact.</p>
           </Copy>
         </div>
 
         <div className="contact-copy-tags">
           <Copy delay={1.15}>
-            <p className="caps sm">Web Systems</p>
-            <p className="caps sm">Interface Design</p>
-            <p className="caps sm">Creative Development</p>
-            <p className="caps sm">End To End Delivery</p>
+            <p className="caps sm">Art</p>
+            <p className="caps sm">Strategy</p>
+            <p className="caps sm">Technology</p>
+            <p className="caps sm">Performance</p>
           </Copy>
         </div>
 
         <div className="contact-copy-addresses">
           <div className="contact-address">
             <Copy delay={1.3}>
-              <p className="caps sm">Toronto</p>
-              <p className="caps sm">Studio 302, Richmond St W</p>
-              <p className="caps sm">M5V 3A8</p>
+              <p className="caps sm">Indore</p>
+              <p className="caps sm">22.7196° N, 75.8577° E</p>
             </Copy>
           </div>
 
           <div className="contact-address">
             <Copy delay={1.45}>
-              <p className="caps sm">Copenhagen</p>
-              <p className="caps sm">Unit 02 Refshalevej 167A</p>
-              <p className="caps sm">1432 KØBENHAVN K</p>
+              <p className="caps sm">Ahmedabad</p>
+              <p className="caps sm">23.0225° N, 72.5714° E</p>
             </Copy>
           </div>
         </div>
 
         <div className="contact-copy-links">
           <Copy delay={1.6}>
+            <p className="caps sm">Ghazal Somaiya</p>
+            <p className="caps sm">Naamdasi Patel</p>
+          </Copy>
+        </div>
+
+        <div className="contact-copy-links">
+          <Copy delay={1.75}>
             <a href="/studio" onClick={(e) => handleNavigation(e, "/studio")}>
-              <p className="caps sm">Studio Overview</p>
-            </a>
-            <a href="/archive" onClick={(e) => handleNavigation(e, "/archive")}>
-              <p className="caps sm">Project Archive</p>
+              <p className="caps sm">Studio</p>
             </a>
             <a href="/work" onClick={(e) => handleNavigation(e, "/work")}>
-              <p className="caps sm">Selected Work</p>
+              <p className="caps sm">Compositions</p>
+            </a>
+            <a href="/archive" onClick={(e) => handleNavigation(e, "/archive")}>
+              <p className="caps sm">Archive</p>
             </a>
           </Copy>
         </div>
@@ -156,14 +161,14 @@ const page = () => {
         <div className="fc-col-lg">
           <div className="footer-text">
             <div className="footer-text-content">
-              <p className="sm caps">Developed by Codegrid</p>
+              <p className="sm caps">This Is That Agency</p>
             </div>
           </div>
         </div>
         <div className="fc-col-sm">
           <div className="footer-text">
             <div className="footer-text-content">
-              <p className="sm caps">&copy; 2025 All Rights Reserved</p>
+              <p className="sm caps">&copy; TITA {new Date().getFullYear()}. All Rights Reserved</p>
             </div>
           </div>
         </div>

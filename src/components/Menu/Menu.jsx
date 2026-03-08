@@ -326,7 +326,7 @@ const Menu = ({ onMenuStateChange }) => {
               >
                 <img
                   className="logo-img"
-                  src="/images/logos/logo_light.png"
+                  src="/logo.png"
                   alt=""
                 />
               </a>
@@ -361,66 +361,67 @@ const Menu = ({ onMenuStateChange }) => {
             </div>
           </div>
           <div className="menu-overlay-items" ref={menuItemsRef}>
-            <div className="revealer">
-              <a
-                href="/"
-                onClick={(e) => {
-                  e.preventDefault();
-                  navigateTo("/");
-                }}
-              >
-                <h1>index,</h1>
-              </a>
+            <div className="menu-item-row">
+              <span className="menu-item-index sm caps mono">01</span>
+              <div className="revealer">
+                <a
+                  href="/"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigateTo("/");
+                  }}
+                >
+                  <h1>Home</h1>
+                </a>
+              </div>
             </div>
-            <div className="revealer">
-              <a
-                href="/work"
-                onClick={(e) => {
-                  e.preventDefault();
-                  navigateTo("/work");
-                }}
-              >
-                <h1>work,</h1>
-              </a>
+            <div className="menu-item-row">
+              <span className="menu-item-index sm caps mono">02</span>
+              <div className="revealer">
+                <a
+                  href="/studio"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigateTo("/studio");
+                  }}
+                >
+                  <h1>Service</h1>
+                </a>
+              </div>
             </div>
-            <div className="revealer">
-              <a
-                href="/studio"
-                onClick={(e) => {
-                  e.preventDefault();
-                  navigateTo("/studio");
-                }}
-              >
-                <h1>studio,</h1>
-              </a>
+            <div className="menu-item-row">
+              <span className="menu-item-index sm caps mono">03</span>
+              <div className="revealer">
+                <a
+                  href="/work"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigateTo("/work");
+                  }}
+                >
+                  <h1>Portfolio</h1>
+                </a>
+              </div>
             </div>
-            <div className="revealer">
-              <a
-                href="/archive"
-                onClick={(e) => {
-                  e.preventDefault();
-                  navigateTo("/archive");
-                }}
-              >
-                <h1>archive,</h1>
-              </a>
-            </div>
-            <div className="revealer">
-              <a
-                href="/contact"
-                onClick={(e) => {
-                  e.preventDefault();
-                  navigateTo("/contact");
-                }}
-              >
-                <h1>contact</h1>
-              </a>
+            <div className="menu-item-row">
+              <span className="menu-item-index sm caps mono">04</span>
+              <div className="revealer">
+                <a
+                  href="/contact"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigateTo("/contact");
+                  }}
+                >
+                  <h1>Contact</h1>
+                </a>
+              </div>
             </div>
           </div>
           <div className="menu-footer" ref={menuFooterColsRef}>
             <div className="menu-footer-col">
               <div className="revealer">
-                <p className="sm caps mono">&copy; 2025 All Rights Reserved</p>
+                <p className="sm caps mono">&copy; TITA {new Date().getFullYear()}. Art. Intelligence. Impact.</p>
               </div>
             </div>
             <div className="menu-footer-col">
@@ -428,22 +429,22 @@ const Menu = ({ onMenuStateChange }) => {
                 <div className="revealer">
                   <a
                     className="sm caps mono"
-                    href="https://www.youtube.com/@codegrid"
+                    href="#"
                   >
-                    YouTube
+                    LinkedIn
                   </a>
                 </div>
                 <div className="revealer">
                   <a
                     className="sm caps mono"
-                    href="https://www.instagram.com/codegridweb/"
+                    href="#"
                   >
                     Instagram
                   </a>
                 </div>
                 <div className="revealer">
-                  <a className="sm caps mono" href="https://x.com/codegridweb">
-                    X
+                  <a className="sm caps mono" href="#">
+                    Behance
                   </a>
                 </div>
               </div>

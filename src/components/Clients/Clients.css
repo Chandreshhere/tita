@@ -1,0 +1,171 @@
+.patrons {
+  position: relative;
+  width: 100vw;
+  height: 100svh;
+  background-color: #000;
+  color: var(--foreground);
+  overflow: hidden;
+}
+
+.patron-label {
+  position: absolute;
+  top: 2.5rem;
+  left: 2.5rem;
+  opacity: 0;
+  z-index: 5;
+}
+
+.patron-label p {
+  color: var(--accent-gold);
+}
+
+.patron-heading {
+  position: absolute;
+  top: 15%;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  opacity: 0;
+  z-index: 5;
+}
+
+.patron-heading h2 {
+  font-size: clamp(2rem, 1rem + 4vw, 5rem);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 300;
+  color: var(--foreground);
+}
+
+.patron-names {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0 1.5rem;
+}
+
+.patron-row {
+  position: relative;
+  padding-left: 3vw;
+}
+
+.patron-char {
+  display: inline-block;
+  transform: translateX(100vw);
+  will-change: transform;
+}
+
+.patron-name {
+  font-size: clamp(3.5rem, 2rem + 6vw, 9rem);
+  text-transform: uppercase;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+  font-weight: 400;
+  will-change: clip-path;
+}
+
+.patron-circle {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: clamp(4rem, 2rem + 5.5vw, 8rem);
+  height: clamp(4rem, 2rem + 5.5vw, 8rem);
+  border-radius: 50%;
+  overflow: hidden;
+  opacity: 0;
+  will-change: transform, opacity;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.patron-circle img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Particle image reveal */
+.patron-reveal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.patron-canvas {
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+}
+
+.patron-subtitle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 11;
+  pointer-events: none;
+}
+
+.patron-sub {
+  position: absolute;
+  opacity: 0;
+  color: var(--foreground);
+  white-space: nowrap;
+}
+
+.patron-sub-left {
+  left: 3vw;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.patron-sub-right {
+  right: 3vw;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.patron-sub-center {
+  bottom: 8%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+@media (max-width: 1000px) {
+  .patron-name {
+    font-size: clamp(2.5rem, 1.5rem + 5vw, 5rem);
+  }
+
+  .patron-circle {
+    width: clamp(3rem, 1.5rem + 4vw, 5.5rem);
+    height: clamp(3rem, 1.5rem + 4vw, 5.5rem);
+  }
+
+  .patron-row {
+    padding-left: 2vw;
+  }
+
+  .patron-names {
+    gap: 0.5rem;
+  }
+
+  .patron-sub {
+    white-space: normal;
+  }
+
+  .patron-sub-left,
+  .patron-sub-right {
+    max-width: 45vw;
+  }
+}

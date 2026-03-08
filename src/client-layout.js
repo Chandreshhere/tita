@@ -1,12 +1,16 @@
 "use client";
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 
 import Menu from "@/components/Menu/Menu";
+import Feather from "@/components/Feather/Feather";
 
 import { ReactLenis } from "lenis/react";
 
 export default function ClientLayout({ children }) {
   const [isMobile, setIsMobile] = useState(false);
+  const pathname = usePathname();
+  const isHome = pathname === "/";
 
   const scrollSettings = isMobile
     ? {
@@ -33,7 +37,7 @@ export default function ClientLayout({ children }) {
         smoothTouch: false,
         touchMultiplier: 2,
         infinite: false,
-        lerp: 0.1,
+        lerp: 0.15,
         wheelMultiplier: 1,
         orientation: "vertical",
         smoothWheel: true,
@@ -41,11 +45,14 @@ export default function ClientLayout({ children }) {
       };
 
   return (
-    <ReactLenis root options={scrollSettings}>
-      <>
-        <Menu />
-      </>
-      {children}
-    </ReactLenis>
+    <>
+      {isHome && <Feather />}
+      <ReactLenis root options={scrollSettings}>
+        <>
+          <Menu />
+        </>
+        {children}
+      </ReactLenis>
+    </>
   );
 }

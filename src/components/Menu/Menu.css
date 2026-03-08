@@ -143,17 +143,40 @@ img.logo-img {
 }
 
 .menu-overlay-items {
-  width: 75%;
-  padding: 0.5rem 1.5rem 1.5rem 1.5rem;
+  position: absolute;
+  right: 0;
+  bottom: 6rem;
+  padding: 1.5rem;
   display: flex;
-  flex-wrap: wrap;
-  gap: 0rem 1rem;
-  align-items: flex-start;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: flex-end;
+}
+
+.menu-item-row {
+  display: flex;
+  align-items: baseline;
+  gap: 1.5rem;
+}
+
+.menu-item-index {
+  font-family: "DM Mono";
+  font-weight: 600;
+  color: var(--foreground-200);
+  -webkit-font-smoothing: antialiased;
 }
 
 .menu-overlay-items .revealer {
   flex: 0 0 auto;
   min-width: max-content;
+}
+
+.menu-overlay-items a h1 {
+  transition: opacity 0.3s ease;
+}
+
+.menu-overlay-items a:hover h1 {
+  opacity: 0.5;
 }
 
 .revealer {
@@ -168,7 +191,7 @@ img.logo-img {
   }
 
   .menu-overlay-items {
-    flex-direction: column;
+    bottom: 5rem;
     padding: 1rem 1.5rem 1.5rem 1.5rem;
   }
 

@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef } from "react";
+import { gsap } from "gsap";
 
 const DynamicBackground = ({ logoPath = "/images/logos/logo_light.png" }) => {
   const canvasRef = useRef(null);
@@ -14,10 +15,13 @@ const DynamicBackground = ({ logoPath = "/images/logos/logo_light.png" }) => {
   const execCountRef = useRef(0);
   const isCleanedUpRef = useRef(false);
   const isMobileRef = useRef(false);
+  const isVisibleRef = useRef(true);
+  const formationRef = useRef({ progress: 0, done: false });
+  const formationTweenRef = useRef(null);
 
   const CONFIG = {
-    canvasBg: "#1a1a1a",
-    logoSize: 1100,
+    canvasBg: "#000000",
+    particleGap: 2,
     distortionRadius: 3000,
     forceStrength: 0.003,
     maxDisplacement: 100,
@@ -172,24 +176,33 @@ const DynamicBackground = ({ logoPath = "/images/logos/logo_light.png" }) => {
 
         const tempCanvas = document.createElement("canvas");
         const tempCtx = tempCanvas.getContext("2d");
-        tempCanvas.width = CONFIG.logoSize;
-        tempCanvas.height = CONFIG.logoSize;
+        const w = canvas.width;
+        const h = canvas.height;
+        tempCanvas.width = w;
+        tempCanvas.height = h;
 
-        tempCtx.clearRect(0, 0, CONFIG.logoSize, CONFIG.logoSize);
+        tempCtx.clearRect(0, 0, w, h);
 
-        const scale = 0.9;
-        const scaledSize = CONFIG.logoSize * scale;
-        const offset = (CONFIG.logoSize - scaledSize) / 2;
+        // Cover the full canvas (like object-fit: cover)
+        const imgRatio = image.width / image.height;
+        const canvasRatio = w / h;
+        let drawW, drawH, drawX, drawY;
+        if (imgRatio > canvasRatio) {
+          drawH = h;
+          drawW = h * imgRatio;
+          drawX = (w - drawW) / 2;
+          drawY = 0;
+        } else {
+          drawW = w;
+          drawH = w / imgRatio;
+          drawX = 0;
+          drawY = (h - drawH) / 2;
+        }
 
-        tempCtx.drawImage(image, offset, offset, scaledSize, scaledSize);
-        const imageData = tempCtx.getImageData(
-          0,
-          0,
-          CONFIG.logoSize,
-          CONFIG.logoSize
-        );
+        tempCtx.drawImage(image, drawX, drawY, drawW, drawH);
+        const imageData = tempCtx.getImageData(0, 0, w, h);
 
-        initParticleSystem(imageData.data, CONFIG.logoSize);
+        initParticleSystem(imageData.data, w, h);
       };
 
       image.onerror = () => {
@@ -199,25 +212,23 @@ const DynamicBackground = ({ logoPath = "/images/logos/logo_light.png" }) => {
       image.src = logoPath;
     };
 
-    function initParticleSystem(pixels, dim) {
+    function initParticleSystem(pixels, w, h) {
       if (isCleanedUpRef.current) return;
-
-      const centerX = canvas.width / 2;
-      const centerY = canvas.height / 2;
 
       particleGridRef.current = [];
       const validParticles = [];
       const validPositions = [];
       const validColors = [];
+      const gap = CONFIG.particleGap;
 
-      for (let i = 0; i < dim; i++) {
-        for (let j = 0; j < dim; j++) {
-          const pixelIndex = (i * dim + j) * 4;
+      for (let i = 0; i < h; i += gap) {
+        for (let j = 0; j < w; j += gap) {
+          const pixelIndex = (i * w + j) * 4;
           const alpha = pixels[pixelIndex + 3];
 
           if (alpha > 10) {
-            const x = centerX + (j - dim / 2) * 1.0;
-            const y = centerY + (i - dim / 2) * 1.0;
+            const x = j;
+            const y = i;
 
             validPositions.push(x, y);
             validColors.push(
@@ -227,9 +238,18 @@ const DynamicBackground = ({ logoPath = "/images/logos/logo_light.png" }) => {
               pixels[pixelIndex + 3] / 255
             );
 
+            // Particles come from left or right edges of screen
+            const goLeft = x < w / 2;
+            const sx = goLeft
+              ? -(Math.random() * w * 0.8)
+              : w + Math.random() * w * 0.8;
+            const sy = y + (Math.random() - 0.5) * h * 0.15;
+
             validParticles.push({
               ox: x,
               oy: y,
+              sx,
+              sy,
               vx: 0,
               vy: 0,
             });
@@ -240,6 +260,12 @@ const DynamicBackground = ({ logoPath = "/images/logos/logo_light.png" }) => {
       particleGridRef.current = validParticles;
       posArrayRef.current = new Float32Array(validPositions);
       colorArrayRef.current = new Float32Array(validColors);
+
+      // Set initial positions to scattered
+      for (let i = 0; i < validParticles.length; i++) {
+        posArrayRef.current[i * 2] = validParticles[i].sx;
+        posArrayRef.current[i * 2 + 1] = validParticles[i].sy;
+      }
 
       const positionBuffer = gl.createBuffer();
       const colorBuffer = gl.createBuffer();
@@ -257,10 +283,29 @@ const DynamicBackground = ({ logoPath = "/images/logos/logo_light.png" }) => {
       };
 
       console.log(`Created ${validParticles.length} particles`);
+
+      // Start particle formation animation
+      formationRef.current = { progress: 0, done: false };
+      formationTweenRef.current = gsap.to(formationRef.current, {
+        progress: 1,
+        duration: 4,
+        ease: "power3.out",
+        delay: 0.5,
+        onComplete: () => {
+          formationRef.current.done = true;
+          // Snap particles to original positions for mouse physics
+          for (let i = 0; i < validParticles.length; i++) {
+            posArrayRef.current[i * 2] = validParticles[i].ox;
+            posArrayRef.current[i * 2 + 1] = validParticles[i].oy;
+          }
+        },
+      });
+
       startAnimation();
     }
 
     function startAnimation() {
+      const bgColor = hexToRgb(CONFIG.canvasBg);
       function animate() {
         if (
           isCleanedUpRef.current ||
@@ -271,7 +316,17 @@ const DynamicBackground = ({ logoPath = "/images/logos/logo_light.png" }) => {
           return;
         }
 
-        if (execCountRef.current > 0) {
+        // Formation phase: lerp particles from scattered to original
+        if (!formationRef.current.done) {
+          const fp = formationRef.current.progress;
+          for (let i = 0, len = particleGridRef.current.length; i < len; i++) {
+            const d = particleGridRef.current[i];
+            posArrayRef.current[i * 2] = d.sx + (d.ox - d.sx) * fp;
+            posArrayRef.current[i * 2 + 1] = d.sy + (d.oy - d.sy) * fp;
+          }
+          gl.bindBuffer(gl.ARRAY_BUFFER, geometryRef.current.positionBuffer);
+          gl.bufferSubData(gl.ARRAY_BUFFER, 0, posArrayRef.current);
+        } else if (execCountRef.current > 0) {
           execCountRef.current -= 1;
 
           const rad = CONFIG.distortionRadius * CONFIG.distortionRadius;
@@ -334,7 +389,6 @@ const DynamicBackground = ({ logoPath = "/images/logos/logo_light.png" }) => {
           gl.bufferSubData(gl.ARRAY_BUFFER, 0, posArrayRef.current);
         }
 
-        const bgColor = hexToRgb(CONFIG.canvasBg);
         gl.viewport(0, 0, canvas.width, canvas.height);
         gl.clearColor(bgColor.r, bgColor.g, bgColor.b, 1.0);
         gl.clear(gl.COLOR_BUFFER_BIT);
@@ -367,7 +421,12 @@ const DynamicBackground = ({ logoPath = "/images/logos/logo_light.png" }) => {
 
         gl.drawArrays(gl.POINTS, 0, geometryRef.current.vertexCount);
 
-        animationFrameRef.current = requestAnimationFrame(animate);
+        const needsLoop = !formationRef.current.done || execCountRef.current > 0;
+        if (isVisibleRef.current && needsLoop) {
+          animationFrameRef.current = requestAnimationFrame(animate);
+        } else {
+          animationFrameRef.current = null;
+        }
       }
 
       animate();
@@ -382,6 +441,9 @@ const DynamicBackground = ({ logoPath = "/images/logos/logo_light.png" }) => {
       mouseRef.current.x = (event.clientX - rect.left) * dpr;
       mouseRef.current.y = (event.clientY - rect.top) * dpr;
       execCountRef.current = 300;
+      if (!animationFrameRef.current && geometryRef.current && isVisibleRef.current) {
+        startAnimation();
+      }
     };
 
     const handleResize = () => {
@@ -393,27 +455,20 @@ const DynamicBackground = ({ logoPath = "/images/logos/logo_light.png" }) => {
       canvas.style.width = window.innerWidth + "px";
       canvas.style.height = window.innerHeight + "px";
 
-      if (geometryRef.current && particleGridRef.current.length > 0) {
-        const centerX = canvas.width / 2;
-        const centerY = canvas.height / 2;
-        const dim = Math.sqrt(particleGridRef.current.length);
-
-        for (let i = 0; i < particleGridRef.current.length; i++) {
-          const row = Math.floor(i / dim);
-          const col = i % dim;
-          const newX = centerX + (col - dim / 2) * 1.0;
-          const newY = centerY + (row - dim / 2) * 1.0;
-
-          particleGridRef.current[i].ox = newX;
-          particleGridRef.current[i].oy = newY;
-          posArrayRef.current[i * 2] = newX;
-          posArrayRef.current[i * 2 + 1] = newY;
-        }
-
-        gl.bindBuffer(gl.ARRAY_BUFFER, geometryRef.current.positionBuffer);
-        gl.bufferSubData(gl.ARRAY_BUFFER, 0, posArrayRef.current);
-      }
+      // Re-generate particles on resize to fill new viewport
+      loadLogo();
     };
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisibleRef.current = entry.isIntersecting;
+        if (entry.isIntersecting && !animationFrameRef.current && geometryRef.current) {
+          startAnimation();
+        }
+      },
+      { threshold: 0 }
+    );
+    observer.observe(canvas);
 
     document.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("resize", handleResize);
@@ -422,6 +477,8 @@ const DynamicBackground = ({ logoPath = "/images/logos/logo_light.png" }) => {
 
     return () => {
       isCleanedUpRef.current = true;
+      if (formationTweenRef.current) formationTweenRef.current.kill();
+      observer.disconnect();
 
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);

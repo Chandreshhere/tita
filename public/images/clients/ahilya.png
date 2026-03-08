@@ -1,0 +1,47 @@
+// Mobile menu toggle
+const mobileBtn = document.getElementById('mobileMenuBtn');
+const mobileMenu = document.getElementById('mobileMenu');
+if (mobileBtn && mobileMenu) {
+  mobileBtn.addEventListener('click', () => {
+    mobileMenu.classList.toggle('hidden');
+  });
+}
+
+// Current year in footer
+const yearEl = document.getElementById('year');
+if (yearEl) {
+  yearEl.textContent = new Date().getFullYear();
+}
+
+// Smooth scroll enhancement for internal links
+const links = document.querySelectorAll('a[href^="#"]');
+links.forEach(link => {
+  link.addEventListener('click', e => {
+    const href = link.getAttribute('href');
+    if (href && href.length > 1) {
+      const target = document.querySelector(href);
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // Close mobile menu after click
+        if (mobileMenu && !mobileMenu.classList.contains('hidden')) mobileMenu.classList.add('hidden');
+      }
+    }
+  });
+});
+
+// Initialize Leaflet map (simple view on Bihar, India)
+try {
+  const mapEl = document.getElementById('map');
+  if (mapEl && typeof L !== 'undefined') {
+    const map = L.map('map').setView([25.61, 85.14], 12); // Approx Patna
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+    const marker = L.marker([25.616, 85.108]).addTo(map);
+    marker.bindPopup('<strong>Tinkklebox</strong><br>Shayam Complex, Santusti lane, Boring Road').openPopup();
+  }
+} catch (err) {
+  console.warn('Map failed to load:', err);
+}

@@ -231,8 +231,12 @@ const page = () => {
                   <div
                     key={projectIndex}
                     className="work-project"
-                    onClick={navigateToProject}
-                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      if (project.url && project.url !== "#") {
+                        window.open(project.url, "_blank", "noopener,noreferrer");
+                      }
+                    }}
+                    style={{ cursor: project.url && project.url !== "#" ? "pointer" : "default" }}
                   >
                     <div className="work-project-img">
                       <img src={project.img} alt={project.name} />

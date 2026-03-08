@@ -1,0 +1,176 @@
+.feather-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  perspective: 1200px;
+  overflow: visible;
+}
+
+.feather-wrapper,
+.feather-container,
+.feather-swing,
+.feather-canvas {
+  overflow: visible;
+}
+
+.feather-container {
+  position: absolute;
+  cursor: default;
+  pointer-events: auto;
+  transform-style: preserve-3d;
+  will-change: transform;
+  opacity: 0;
+}
+
+.feather-container.dissolved {
+  pointer-events: none;
+}
+
+.feather-swing {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.feather-canvas {
+  display: block;
+  will-change: contents;
+}
+
+/* Contact Modal */
+.feather-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100svh;
+  z-index: 10001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.feather-modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.feather-modal-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.feather-modal {
+  position: relative;
+  width: min(90vw, 600px);
+  background-color: var(--background-200);
+  border: 1px solid rgba(198, 167, 94, 0.15);
+  padding: clamp(2rem, 4vw, 4rem);
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  color: var(--foreground);
+  transform: translateY(40px) scale(0.95);
+  opacity: 0;
+}
+
+.feather-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.feather-modal-header h2 {
+  font-size: clamp(1.5rem, 1rem + 2vw, 3rem);
+  color: var(--accent-gold);
+}
+
+.feather-modal-close {
+  background: none;
+  border: none;
+  color: var(--foreground-200);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  line-height: 1;
+  font-family: "nm";
+  transition: color 0.3s ease;
+}
+
+.feather-modal-close:hover {
+  color: var(--foreground);
+}
+
+.feather-modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.feather-modal-body p {
+  color: var(--foreground-200);
+  line-height: 1.5;
+}
+
+.feather-modal-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.feather-modal-link {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: var(--foreground);
+  text-decoration: none;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid rgba(243, 237, 226, 0.08);
+  transition: color 0.3s ease, border-color 0.3s ease;
+}
+
+.feather-modal-link:hover {
+  color: var(--accent-gold);
+  border-color: rgba(198, 167, 94, 0.3);
+}
+
+.feather-modal-link span.label {
+  font-family: "DM Mono";
+  font-size: clamp(0.7rem, 0.5rem + 0.4vw, 0.9rem);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--foreground-200);
+  min-width: 5rem;
+}
+
+.feather-modal-footer {
+  padding-top: 1rem;
+  border-top: 1px solid rgba(243, 237, 226, 0.06);
+}
+
+.feather-modal-footer p {
+  font-family: "DM Mono";
+  font-size: clamp(0.65rem, 0.4rem + 0.3vw, 0.8rem);
+  text-transform: uppercase;
+  color: var(--foreground-200);
+  letter-spacing: 0.05em;
+}
+
+@media (max-width: 1000px) {
+  .feather-modal {
+    width: min(92vw, 500px);
+    padding: clamp(1.5rem, 3vw, 2.5rem);
+  }
+}
