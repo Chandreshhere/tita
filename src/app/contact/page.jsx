@@ -99,7 +99,7 @@ const page = () => {
     <div className="contact" ref={contactRef}>
       <div className="contact-img-wrapper">
         <div className="contact-img">
-          <img src="/images/contact/contact.jpeg" alt="" />
+          <img src="/contact.jpeg" alt="" />
         </div>
       </div>
       <div className="contact-copy">

@@ -211,7 +211,7 @@ const page = () => {
               className={`year-index year-index-var-${(yearIndex % 3) + 1}`}
             >
               <Copy delay={0.85}>
-                <p className="sm">{yearData.year.slice(-2)}</p>
+                <p className="sm caps">{yearData.label}</p>
               </Copy>
               <div className="year-index-highlighter"></div>
             </div>
@@ -223,7 +223,7 @@ const page = () => {
             <div key={yearIndex} className="work-container">
               <div className="work-year-container">
                 <Copy delay={0.85} animateOnScroll={false}>
-                  <h1 className="work-year">'{yearData.year.slice(-2)}</h1>
+                  <h1 className="work-year">{yearData.label}</h1>
                 </Copy>
               </div>
               <div className="work-projects-container">

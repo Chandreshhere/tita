@@ -16,6 +16,7 @@ const Feather = () => {
   const containerRef = useRef(null);
   const swingRef = useRef(null);
   const canvasRef = useRef(null);
+  const morphImgDataRef = useRef(null);
   const particlesRef = useRef([]);
   const animFrameRef = useRef(null);
   const modeRef = useRef("idle");
@@ -73,7 +74,7 @@ const Feather = () => {
 
     const morphImg = new Image();
     morphImg.crossOrigin = "anonymous";
-    morphImg.src = "/logo.png";
+    morphImg.src = "/logo_white.png";
 
     let morphLoaded = false;
 
@@ -141,11 +142,13 @@ const Feather = () => {
 
       // Sample morph target image (logo) — centered in canvas space
       if (mImg && morphLoaded) {
-        const mScale = Math.min(displayW / mImg.width, displayH / mImg.height) * 0.7;
+        const mScale = Math.min(displayW / mImg.width, displayH / mImg.height) * 0.75;
         const mW = Math.round(mImg.width * mScale);
         const mH = Math.round(mImg.height * mScale);
         const mOffX = (displayW - mW) / 2;
         const mOffY = (displayH - mH) / 2;
+
+        morphImgDataRef.current = { img: mImg, x: mOffX, y: mOffY, w: mW, h: mH };
 
         const mCanvas = document.createElement("canvas");
         mCanvas.width = Math.round(mW * dpr);
@@ -174,21 +177,17 @@ const Feather = () => {
         }
 
         if (morphPositions.length > 0) {
-          // Shuffle morph positions
           for (let i = morphPositions.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [morphPositions[i], morphPositions[j]] = [morphPositions[j], morphPositions[i]];
           }
 
-          // Shuffle particle indices for random pairing
           const pIndices = [...Array(particles.length).keys()];
           for (let i = pIndices.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [pIndices[i], pIndices[j]] = [pIndices[j], pIndices[i]];
           }
 
-          // Assign — if more particles than morph positions, extras fade out
-          // If more morph positions than particles, wrap around
           const assignCount = Math.min(particles.length, morphPositions.length);
           for (let i = 0; i < assignCount; i++) {
             const p = particles[pIndices[i]];
@@ -215,10 +214,15 @@ const Feather = () => {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.save();
         ctx.scale(dpr, dpr);
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = "high";
 
         const mode = modeRef.current;
         const mt = morph.current;
         let needsContinue = false;
+
+        // When mt > 0.92, fade particles out as clean logo fades in
+        const particleFade = mt > 0.92 ? Math.max(0, 1 - (mt - 0.92) / 0.08) : 1;
 
         for (let i = 0, len = particles.length; i < len; i++) {
           const p = particles[i];
@@ -238,7 +242,7 @@ const Feather = () => {
               ? p.oy * (1 - mt) + p.ty * mt
               : p.oy;
             const targetA = mt > 0 && !p.hasTarget
-              ? p.oa * Math.max(0, 1 - mt * 1.5)
+              ? p.oa * Math.max(0, 1 - mt * 4)
               : p.oa;
             p.x += (targetX - p.x) * 0.07;
             p.y += (targetY - p.y) * 0.07;
@@ -263,7 +267,6 @@ const Feather = () => {
             p.wx += (targetWx - p.wx) * 0.08;
             p.wy += (targetWy - p.wy) * 0.08;
 
-            // Dampen wobble during morph so image stays crisp
             const wobbleDamp = 1 - mt;
 
             if (mt > 0 && p.hasTarget) {
@@ -275,7 +278,7 @@ const Feather = () => {
             } else if (mt > 0 && !p.hasTarget) {
               p.x = p.ox + p.wx * wobbleDamp;
               p.y = p.oy + p.wy * wobbleDamp;
-              p.a = p.oa * Math.max(0, 1 - mt * 1.5);
+              p.a = p.oa * Math.max(0, 1 - mt * 4);
             } else {
               p.x = p.ox + p.wx;
               p.y = p.oy + p.wy;
@@ -288,7 +291,9 @@ const Feather = () => {
 
           if (p.a <= 0) continue;
 
-          // Color blending during morph
+          // Skip drawing particles when fully replaced by clean logo
+          if (particleFade <= 0) continue;
+
           if ((mode === "normal" || mode === "reforming") && mt > 0 && p.hasTarget) {
             const cr = Math.round(p.r * (1 - mt) + p.tr * mt);
             const cg = Math.round(p.g * (1 - mt) + p.tg * mt);
@@ -298,8 +303,16 @@ const Feather = () => {
             ctx.fillStyle = `rgb(${p.r},${p.g},${p.b})`;
           }
 
-          ctx.globalAlpha = p.a;
+          ctx.globalAlpha = p.a * particleFade;
           ctx.fillRect(p.x, p.y, p.size, p.size);
+        }
+
+        // Draw clean logo image, crossfading with particles
+        if ((mode === "normal" || mode === "reforming") && mt > 0.92 && morphImgDataRef.current) {
+          const md = morphImgDataRef.current;
+          const imgAlpha = (mt - 0.92) / 0.08;
+          ctx.globalAlpha = imgAlpha;
+          ctx.drawImage(md.img, md.x, md.y, md.w, md.h);
         }
 
         ctx.restore();
@@ -467,7 +480,7 @@ const Feather = () => {
       });
     });
 
-    // Morph: feather → logo image as Footer enters viewport
+    // Morph: feather → logo particles as Footer enters viewport
     ScrollTrigger.create({
       trigger: ".footer",
       start: "top 80%",

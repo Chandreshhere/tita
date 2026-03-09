@@ -9,9 +9,9 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 const items = [
-  { name: "Light = Creativity", image: "/images/who-we-are/team-1.jpg" },
-  { name: "Shadow = Data", image: "/images/who-we-are/team-2.jpg" },
-  { name: "Together = Conversion", image: "/images/who-we-are/team-3.jpg" },
+  { name: "Light = Creativity", image: "/c1.png" },
+  { name: "Shadow = Data", image: "/c2.png" },
+  { name: "Together = Conversion", image: "/c3.png" },
 ];
 
 const Clients = () => {

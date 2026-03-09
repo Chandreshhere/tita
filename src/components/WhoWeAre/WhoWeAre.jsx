@@ -12,6 +12,7 @@ const WhoWeAre = () => {
   const sectionRef = useRef(null);
   const containerRef = useRef(null);
   const scrollRef = useRef(null);
+  const rollingCircleRef = useRef(null);
 
   useGSAP(() => {
     const section = sectionRef.current;
@@ -76,6 +77,11 @@ const WhoWeAre = () => {
               el.style.transform = `translateX(${images[idx].endTranslateX * adjustedProgress}px)`;
             }
           });
+
+          if (rollingCircleRef.current) {
+            const rotation = adjustedProgress * 720;
+            rollingCircleRef.current.style.transform = `rotate(${rotation}deg)`;
+          }
         }
       },
     });
@@ -88,6 +94,29 @@ const WhoWeAre = () => {
           <div className="whoweare-header">
             <h1>The Renaissance</h1>
           </div>
+
+          <p className="whoweare-text" id="wwa-text-1">Once, art changed the world.</p>
+          <p className="whoweare-text" id="wwa-text-2">Now, data does.</p>
+          <p className="whoweare-text" id="wwa-text-3">We stand where both meet.</p>
+          <p className="whoweare-text" id="wwa-text-4">We are not vendors.</p>
+          <p className="whoweare-text" id="wwa-text-5">We are patrons of modern ambition.</p>
+          <p className="whoweare-text" id="wwa-text-6">We don&apos;t run ads.</p>
+          <div className="whoweare-rolling-circle" id="wwa-text-7" ref={rollingCircleRef}>
+            <svg viewBox="0 0 200 200">
+              <defs>
+                <path
+                  id="circlePath"
+                  d="M 100,100 m -80,0 a 80,80 0 1,1 160,0 a 80,80 0 1,1 -160,0"
+                />
+              </defs>
+              <text>
+                <textPath href="#circlePath">
+                  We orchestrate movements &bull; We orchestrate movements &bull;
+                </textPath>
+              </text>
+            </svg>
+          </div>
+          <p className="whoweare-text" id="wwa-text-8">We don&apos;t design posts.</p>
 
           <div className="whoweare-img" id="whoweare-img-1">
             <img src="/1.jpeg" alt="" loading="lazy" />

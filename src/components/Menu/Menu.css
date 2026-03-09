@@ -28,6 +28,11 @@
   z-index: 1000;
   mix-blend-mode: difference;
   pointer-events: none;
+  transition: transform 0.4s ease;
+}
+
+.nav-container.nav-hidden {
+  transform: translateY(-200%);
 }
 
 .nav {
@@ -51,12 +56,16 @@
 }
 
 .nav-logo {
-  flex: 2;
+  position: absolute;
+  left: 50%;
+  top: -1rem;
+  transform: translateX(-50%);
 }
 
 .nav-items {
   flex: 1;
   display: flex;
+  margin-left: auto;
 }
 
 .nav-menu-toggle-open,
@@ -75,7 +84,7 @@
 }
 
 img.logo-img {
-  width: 2rem;
+  width: 8rem;
 }
 
 .menu-overlay {

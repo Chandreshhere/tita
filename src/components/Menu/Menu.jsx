@@ -18,6 +18,7 @@ const Menu = ({ onMenuStateChange }) => {
 
   const menuRef = useRef(null);
   const navRef = useRef(null);
+  const navContainerRef = useRef(null);
   const menuOverlayRef = useRef(null);
 
   const navLogoRef = useRef(null);
@@ -27,6 +28,7 @@ const Menu = ({ onMenuStateChange }) => {
 
   const menuItemsRef = useRef(null);
   const menuFooterColsRef = useRef(null);
+  const lastScrollY = useRef(0);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -72,6 +74,24 @@ const Menu = ({ onMenuStateChange }) => {
       router.events?.off?.("routeChangeComplete", handleRouteChange);
     };
   }, [router]);
+
+  useEffect(() => {
+    const navContainer = navContainerRef.current;
+    if (!navContainer) return;
+
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      if (scrollY > lastScrollY.current && scrollY > 50) {
+        navContainer.classList.add("nav-hidden");
+      } else {
+        navContainer.classList.remove("nav-hidden");
+      }
+      lastScrollY.current = scrollY;
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   useGSAP(
     () => {
@@ -146,12 +166,19 @@ const Menu = ({ onMenuStateChange }) => {
   };
 
   const navigateTo = (path) => {
-    if (isAnimating) return;
-
     if (isExactPath(path)) {
-      closeMenu();
+      if (!isAnimating) closeMenu();
       return;
     }
+
+    setIsAnimating(false);
+    gsap.killTweensOf([
+      menuBtnRef.current,
+      closeBtnRef.current,
+      menuOverlayRef.current,
+      ".menu-overlay-items .revealer a",
+      ".menu-footer .revealer p, .menu-footer .revealer a",
+    ]);
 
     closeMenu();
 
@@ -308,7 +335,7 @@ const Menu = ({ onMenuStateChange }) => {
 
   return (
     <>
-      <div className="nav-container">
+      <div className="nav-container" ref={navContainerRef}>
         <div className="nav" ref={navRef}>
           <div className="nav-logo">
             <div className="revealer">
@@ -326,7 +353,7 @@ const Menu = ({ onMenuStateChange }) => {
               >
                 <img
                   className="logo-img"
-                  src="/logo.png"
+                  src="/logo_white.png"
                   alt=""
                 />
               </a>

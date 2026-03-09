@@ -1,6 +1,7 @@
 export const portfolio = [
   {
     year: "2025",
+    label: "Renaissance",
     projects: [
       {
         name: "Kimirica",
@@ -54,6 +55,7 @@ export const portfolio = [
   },
   {
     year: "2024",
+    label: "Amplify",
     projects: [
       {
         name: "Fayon Kids",
@@ -107,6 +109,7 @@ export const portfolio = [
   },
   {
     year: "2023",
+    label: "Compose",
     projects: [
       {
         name: "The House of Migo",
@@ -154,6 +157,7 @@ export const portfolio = [
   },
   {
     year: "2022",
+    label: "Ignite",
     projects: [
       {
         name: "Davesmen",
@@ -201,6 +205,7 @@ export const portfolio = [
   },
   {
     year: "2021",
+    label: "Genesis",
     projects: [
       {
         name: "Rahul Garg",
