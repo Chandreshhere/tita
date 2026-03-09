@@ -303,15 +303,18 @@
 
   .svc-spread {
     padding: 6rem 1.5rem 4rem 1.5rem;
+    min-height: auto;
   }
 
   .spread-layout,
   .spread-layout-reverse {
     flex-direction: column;
+    gap: 2rem;
   }
 
   .spread-col-list {
     padding-top: 0;
+    gap: 2rem;
   }
 
   .spread-col-img {
@@ -334,28 +337,141 @@
     font-size: clamp(4rem, 2rem + 14vw, 12rem);
   }
 
+  .svc-item {
+    padding: 0.65rem 0;
+    gap: 0.75rem;
+  }
+
   .chiaroscuro {
-    padding: 6rem 1.5rem;
+    padding: 5rem 1.5rem;
+    min-height: auto;
   }
 
   .chiaroscuro-inner {
     width: 100%;
+    gap: 2rem;
   }
 
   .chia-grid {
     flex-direction: column;
     gap: 2.5rem;
+    padding: 1rem 0;
   }
 
-  .chia-title h1 {
-    font-size: clamp(1.5rem, 0.5rem + 4vw, 3rem);
+  .chia-col {
+    gap: 0.75rem;
+  }
+
+  .chiaroscuro .chia-title h1 {
+    font-size: clamp(3rem, 1.5rem + 6vw, 6rem);
+  }
+
+  .chiaroscuro .chia-col h3 {
+    font-size: clamp(3rem, 1.5rem + 5vw, 5rem);
+  }
+
+  .chiaroscuro .chia-col p.sm {
+    font-size: clamp(1.3rem, 0.7rem + 2vw, 2rem);
+  }
+
+  .chiaroscuro .chia-label p.sm {
+    font-size: clamp(1.3rem, 0.7rem + 2vw, 2rem);
+  }
+
+  .chiaroscuro .chia-manifesto p {
+    font-size: clamp(1.5rem, 0.8rem + 2.5vw, 2.5rem);
+    line-height: 2;
+  }
+
+  .chia-bar {
+    height: 6px;
   }
 
   .svc-cta {
-    padding: 6rem 1.5rem;
+    padding: 5rem 1.5rem;
   }
 
   .svc-cta-inner h2 {
     max-width: 100%;
+    font-size: clamp(2rem, 1rem + 4vw, 4rem);
+  }
+
+  .svc-cta-inner {
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .svc-hero-img {
+    width: 85vw;
+    height: 40vh;
+  }
+
+  .svc-hero-title h1 {
+    font-size: clamp(2rem, 0.5rem + 10vw, 5rem);
+  }
+
+  .svc-hero-sub {
+    bottom: 1rem;
+    right: 1rem;
+  }
+
+  .svc-spread {
+    padding: 4rem 1rem 3rem 1rem;
+  }
+
+  .spread-layout,
+  .spread-layout-reverse {
+    gap: 1.5rem;
+  }
+
+  .spread-col-list {
+    gap: 1.5rem;
+  }
+
+  .chiaroscuro {
+    padding: 3rem 1rem;
+  }
+
+  .chiaroscuro-inner {
+    gap: 1.5rem;
+  }
+
+  .chia-grid {
+    gap: 2rem;
+    padding: 0.75rem 0;
+  }
+
+  .chia-col {
+    gap: 0.5rem;
+  }
+
+  .chiaroscuro .chia-title h1 {
+    font-size: clamp(2.5rem, 1rem + 7vw, 5rem);
+  }
+
+  .chiaroscuro .chia-col h3 {
+    font-size: clamp(2.5rem, 1rem + 6vw, 4.5rem);
+  }
+
+  .chiaroscuro .chia-col p.sm {
+    font-size: clamp(1.1rem, 0.6rem + 2vw, 1.8rem);
+  }
+
+  .chiaroscuro .chia-label p.sm {
+    font-size: clamp(1.1rem, 0.6rem + 2vw, 1.8rem);
+  }
+
+  .chiaroscuro .chia-manifesto p {
+    font-size: clamp(1.3rem, 0.6rem + 3vw, 2.2rem);
+    line-height: 1.8;
+  }
+
+  .svc-cta {
+    padding: 3rem 1rem;
+  }
+
+  .svc-cta-inner h2 {
+    font-size: clamp(1.8rem, 0.8rem + 4vw, 3.5rem);
   }
 }

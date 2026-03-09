@@ -143,30 +143,146 @@
   transform: translateX(-50%);
 }
 
+/* Show desktop, hide mobile by default */
+.patron-names-mobile {
+  display: none;
+}
+
 @media (max-width: 1000px) {
+  .patron-names-desktop {
+    display: none;
+  }
+
+  .patron-names-mobile {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    transform: translateY(-50%);
+    padding: 0 1rem;
+    gap: 1rem;
+  }
+
   .patron-name {
-    font-size: clamp(2rem, 1rem + 4vw, 3.5rem);
+    font-size: clamp(3rem, 1.5rem + 6vw, 6rem);
   }
 
   .patron-circle {
-    width: clamp(3rem, 1.5rem + 4vw, 5.5rem);
-    height: clamp(3rem, 1.5rem + 4vw, 5.5rem);
+    width: clamp(4.5rem, 2rem + 6vw, 7rem);
+    height: clamp(4.5rem, 2rem + 6vw, 7rem);
   }
 
   .patron-row {
-    padding-left: 0.5vw;
+    padding-left: 0;
+  }
+
+  .patron-row:nth-child(1) {
+    padding-left: 2vw;
+  }
+
+  .patron-row:nth-child(2) {
+    padding-left: 20vw;
+  }
+
+  .patron-row:nth-child(3) {
+    padding-left: 5vw;
+  }
+
+  .patron-row:nth-child(4) {
+    padding-left: 25vw;
+  }
+
+  .patron-row:nth-child(5) {
+    padding-left: 8vw;
+  }
+
+  .patron-row:nth-child(6) {
+    padding-left: 18vw;
   }
 
   .patron-names {
-    gap: 0.5rem;
+    gap: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 0 1rem;
   }
 
   .patron-sub {
-    white-space: normal;
+    white-space: nowrap;
   }
 
-  .patron-sub-left,
+  .patron-sub-left {
+    top: 10%;
+    left: 4vw;
+    transform: none;
+  }
+
   .patron-sub-right {
-    max-width: 45vw;
+    top: 50%;
+    bottom: auto;
+    right: auto;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .patron-sub-center {
+    bottom: 8%;
+    left: 4vw;
+    transform: none;
+  }
+
+  .patron-heading h2 {
+    font-size: clamp(1.8rem, 0.8rem + 3.5vw, 3.5rem);
+  }
+
+  .patron-sub h2 {
+    font-size: clamp(1.5rem, 0.7rem + 3vw, 3rem);
+  }
+
+  .patron-label {
+    top: 1.5rem;
+    left: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .patron-name {
+    font-size: clamp(2.5rem, 1rem + 6vw, 4.5rem);
+  }
+
+  .patron-circle {
+    width: clamp(3.5rem, 1.5rem + 5vw, 5.5rem);
+    height: clamp(3.5rem, 1.5rem + 5vw, 5.5rem);
+  }
+
+  .patron-names-mobile {
+    gap: 0.75rem;
+    padding: 0 0.5rem;
+  }
+
+  .patron-sub h2 {
+    font-size: clamp(1.3rem, 0.6rem + 2.5vw, 2.2rem);
+  }
+
+  .patron-sub-left {
+    top: 8%;
+    left: 3vw;
+    transform: none;
+  }
+
+  .patron-sub-right {
+    top: 50%;
+    bottom: auto;
+    right: auto;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .patron-sub-center {
+    bottom: 7%;
+    left: 3vw;
+    transform: none;
   }
 }

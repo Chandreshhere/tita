@@ -19,15 +19,6 @@ const DynamicBackground = ({ logoPath = "/images/logos/logo_light.png" }) => {
   const formationRef = useRef({ progress: 0, done: false });
   const formationTweenRef = useRef(null);
 
-  const CONFIG = {
-    canvasBg: "#000000",
-    particleGap: 2,
-    distortionRadius: 3000,
-    forceStrength: 0.003,
-    maxDisplacement: 100,
-    returnForce: 0.025,
-  };
-
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -35,17 +26,22 @@ const DynamicBackground = ({ logoPath = "/images/logos/logo_light.png" }) => {
     const checkMobile = () => window.innerWidth < 1000;
     isMobileRef.current = checkMobile();
 
-    if (isMobileRef.current) {
-      return;
-    }
-
     isCleanedUpRef.current = false;
 
-    const dpr = window.devicePixelRatio || 1;
+    const CONFIG = {
+      canvasBg: "#000000",
+      particleGap: isMobileRef.current ? 3 : 2,
+      distortionRadius: isMobileRef.current ? 2000 : 3000,
+      forceStrength: 0.003,
+      maxDisplacement: isMobileRef.current ? 60 : 100,
+      returnForce: 0.025,
+    };
+
+    const dpr = isMobileRef.current ? Math.min(window.devicePixelRatio || 1, 2) : (window.devicePixelRatio || 1);
     canvas.width = window.innerWidth * dpr;
     canvas.height = window.innerHeight * dpr;
-    canvas.style.width = window.innerWidth + "px";
-    canvas.style.height = window.innerHeight + "px";
+    canvas.style.width = "100%";
+    canvas.style.height = "100%";
 
     const gl = canvas.getContext("webgl", {
       alpha: true,
@@ -197,6 +193,17 @@ const DynamicBackground = ({ logoPath = "/images/logos/logo_light.png" }) => {
           drawH = w / imgRatio;
           drawX = 0;
           drawY = (h - drawH) / 2;
+        }
+
+        // Scale down and center on mobile
+        if (isMobileRef.current) {
+          const scale = 0.7;
+          const newW = drawW * scale;
+          const newH = drawH * scale;
+          drawX = Math.round((w - newW) / 2);
+          drawY = Math.round((h - newH) / 2);
+          drawW = newW;
+          drawH = newH;
         }
 
         tempCtx.drawImage(image, drawX, drawY, drawW, drawH);
@@ -452,8 +459,8 @@ const DynamicBackground = ({ logoPath = "/images/logos/logo_light.png" }) => {
       const dpr = window.devicePixelRatio || 1;
       canvas.width = window.innerWidth * dpr;
       canvas.height = window.innerHeight * dpr;
-      canvas.style.width = window.innerWidth + "px";
-      canvas.style.height = window.innerHeight + "px";
+      canvas.style.width = "100%";
+      canvas.style.height = "100%";
 
       // Re-generate particles on resize to fill new viewport
       loadLogo();
@@ -470,7 +477,21 @@ const DynamicBackground = ({ logoPath = "/images/logos/logo_light.png" }) => {
     );
     observer.observe(canvas);
 
+    const handleTouchMove = (event) => {
+      if (isCleanedUpRef.current || !event.touches[0]) return;
+      const touch = event.touches[0];
+      const rect = canvas.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      mouseRef.current.x = (touch.clientX - rect.left) * dpr;
+      mouseRef.current.y = (touch.clientY - rect.top) * dpr;
+      execCountRef.current = 300;
+      if (!animationFrameRef.current && geometryRef.current && isVisibleRef.current) {
+        startAnimation();
+      }
+    };
+
     document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("touchmove", handleTouchMove, { passive: true });
     window.addEventListener("resize", handleResize);
 
     loadLogo();
@@ -486,6 +507,7 @@ const DynamicBackground = ({ logoPath = "/images/logos/logo_light.png" }) => {
       }
 
       document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("touchmove", handleTouchMove);
       window.removeEventListener("resize", handleResize);
 
       if (gl && !gl.isContextLost()) {

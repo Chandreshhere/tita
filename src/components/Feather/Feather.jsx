@@ -58,6 +58,8 @@ const Feather = () => {
 
   // Load feather.png + logo.png → create particles with morph targets
   useEffect(() => {
+    if (window.innerWidth < 1000) return;
+
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -354,6 +356,7 @@ const Feather = () => {
 
   // Scroll-driven path + swing + morph + dissolve
   useGSAP(() => {
+    if (window.innerWidth < 1000) return;
     if (!containerRef.current || !wrapperRef.current || !swingRef.current) return;
 
     const container = containerRef.current;
@@ -366,19 +369,19 @@ const Feather = () => {
 
     const waypoints = isMobile
       ? [
-          { x: vw * 0.5 - hw, y: vh * 0.55, rotateY: -4, rotateX: 2 },
-          { x: vw * 0.38 - hw, y: vh * 0.50, rotateY: 5, rotateX: -2 },
-          { x: vw * 0.28 - hw, y: vh * 0.52, rotateY: 7, rotateX: -3 },
-          { x: vw * 0.35 - hw, y: vh * 0.55, rotateY: 4, rotateX: 2 },
-          { x: vw * 0.55 - hw, y: vh * 0.57, rotateY: -5, rotateX: -2 },
-          { x: vw * 0.62 - hw, y: vh * 0.59, rotateY: -6, rotateX: 3 },
-          { x: vw * 0.52 - hw, y: vh * 0.61, rotateY: -3, rotateX: -2 },
-          { x: vw * 0.38 - hw, y: vh * 0.63, rotateY: 5, rotateX: 2 },
-          { x: vw * 0.32 - hw, y: vh * 0.65, rotateY: 6, rotateX: -2 },
-          { x: vw * 0.42 - hw, y: vh * 0.67, rotateY: 3, rotateX: 2 },
-          { x: vw * 0.52 - hw, y: vh * 0.69, rotateY: -3, rotateX: -1 },
-          { x: vw * 0.48 - hw, y: vh * 0.72, rotateY: -1, rotateX: 1 },
-          { x: vw * 0.5 - hw, y: vh * 0.75, rotateY: 0, rotateX: 0 },
+          { x: vw * 0.40 - hw, y: vh * 0.15, rotateY: -4, rotateX: 2 },
+          { x: vw * 0.28 - hw, y: vh * 0.10, rotateY: 5, rotateX: -2 },
+          { x: vw * 0.18 - hw, y: vh * 0.12, rotateY: 7, rotateX: -3 },
+          { x: vw * 0.25 - hw, y: vh * 0.15, rotateY: 4, rotateX: 2 },
+          { x: vw * 0.45 - hw, y: vh * 0.17, rotateY: -5, rotateX: -2 },
+          { x: vw * 0.52 - hw, y: vh * 0.19, rotateY: -6, rotateX: 3 },
+          { x: vw * 0.42 - hw, y: vh * 0.21, rotateY: -3, rotateX: -2 },
+          { x: vw * 0.28 - hw, y: vh * 0.23, rotateY: 5, rotateX: 2 },
+          { x: vw * 0.22 - hw, y: vh * 0.25, rotateY: 6, rotateX: -2 },
+          { x: vw * 0.32 - hw, y: vh * 0.27, rotateY: 3, rotateX: 2 },
+          { x: vw * 0.42 - hw, y: vh * 0.29, rotateY: -3, rotateX: -1 },
+          { x: vw * 0.38 - hw, y: vh * 0.32, rotateY: -1, rotateX: 1 },
+          { x: vw * 0.40 - hw, y: vh * 0.35, rotateY: 0, rotateX: 0 },
         ]
       : [
           // Start at hero bottom

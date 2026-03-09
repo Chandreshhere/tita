@@ -113,13 +113,22 @@
 }
 
 @media (max-width: 1000px) {
-  .sp-year {
-    display: none;
+  .sp-hero {
+    height: 45svh;
+  }
+
+  .sp-banner-img {
+    height: 60svh;
   }
 
   .sp-info .sp-col-sm {
     display: flex;
     justify-content: flex-end;
+  }
+
+  .sp-info,
+  .sp-copy-wrapper {
+    margin-bottom: 5rem;
   }
 
   .sp-copy-wrapper {
@@ -134,5 +143,51 @@
 
   .sp-images-container {
     width: 85%;
+  }
+
+  .sp-next-project {
+    height: auto;
+    min-height: 60svh;
+    padding: 4rem 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .sp-hero {
+    height: 35svh;
+    padding: 1rem 1rem 0 1rem;
+  }
+
+  .sp-banner-img {
+    height: 50svh;
+  }
+
+  .sp-copy {
+    padding: 1rem;
+  }
+
+  .sp-info,
+  .sp-copy-wrapper {
+    margin-bottom: 3rem;
+  }
+
+  .sp-copy-wrapper {
+    gap: 2rem;
+  }
+
+  .sp-images {
+    padding: 1rem;
+  }
+
+  .sp-images-container {
+    width: 95%;
+  }
+
+  .sp-link {
+    margin-top: 2rem;
+  }
+
+  .sp-next-project {
+    padding: 3rem 1rem;
   }
 }

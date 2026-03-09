@@ -8,11 +8,36 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const items = [
+const desktopItems = [
   { name: "Light = Creativity", image: "/c1.png" },
   { name: "Shadow = Data", image: "/c2.png" },
   { name: "Together = Conversion", image: "/c3.png" },
 ];
+
+const mobileItems = [
+  { name: "Light", image: "/c1.png" },
+  { name: "Creativity", image: "/c2.png" },
+  { name: "Shadow", image: "/c3.png" },
+  { name: "Data", image: "/c1.png" },
+  { name: "Together", image: "/c2.png" },
+  { name: "Conversion", image: "/c3.png" },
+];
+
+const renderItems = (items) =>
+  items.map((item, i) => (
+    <div className="patron-row" key={i}>
+      <h1 className="patron-name">
+        {item.name.split("").map((char, j) => (
+          <span className="patron-char" key={j}>
+            {char === " " ? "\u00A0" : char}
+          </span>
+        ))}
+      </h1>
+      <div className="patron-circle">
+        <img src={item.image} alt={item.name} loading="lazy" />
+      </div>
+    </div>
+  ));
 
 const Clients = () => {
   const sectionRef = useRef(null);
@@ -118,11 +143,22 @@ const Clients = () => {
         tc.width = w;
         tc.height = h;
 
-        // Cover, shifted left
+        // Cover, shifted left on desktop, shifted left on mobile
+        const isMobile = window.innerWidth < 1000;
         const ir = img.width / img.height;
         const cr = w / h;
         let dw, dh, dx, dy;
-        if (ir > cr) {
+        if (isMobile) {
+          if (ir > cr) {
+            dh = h;
+            dw = h * ir;
+          } else {
+            dw = w;
+            dh = w / ir;
+          }
+          dx = (w - dw) / 2 - w * 0.85;
+          dy = (h - dh) / 2;
+        } else if (ir > cr) {
           dh = h;
           dw = h * ir;
           dx = (w - dw) / 2 - w * 0.25;
@@ -270,7 +306,15 @@ const Clients = () => {
     const canvas = canvasRef.current;
     if (!section) return;
 
-    const rows = section.querySelectorAll(".patron-row");
+    const isMobile = window.innerWidth < 1000;
+
+    // Query only the visible set of rows
+    const namesContainer = section.querySelector(
+      isMobile ? ".patron-names-mobile" : ".patron-names-desktop"
+    );
+    if (!namesContainer) return;
+
+    const rows = namesContainer.querySelectorAll(".patron-row");
     const label = section.querySelector(".patron-label");
     const subs = section.querySelectorAll(".patron-sub");
 
@@ -307,7 +351,7 @@ const Clients = () => {
             x: 0,
             duration: 0.8,
             stagger: 0.02,
-            delay: i * 0.25,
+            delay: i * (isMobile ? 0.12 : 0.25),
             ease: "power3.out",
           });
         });
@@ -342,58 +386,99 @@ const Clients = () => {
           label.style.opacity = inP * (1 - outP);
         }
 
-        // --- ALL 3 CIRCLES COME TOGETHER & ROLL LEFT IN SYNC ---
-        const enterStart = 0.08;
-        const enterEnd = 0.20;
-        const rollStart = 0.20;
-        const rollEnd = 0.60;
-        const exitEnd = 0.70;
+        if (isMobile) {
+          // --- MOBILE: 6 circles staggered, each rolls right-to-left ---
+          const staggerGap = 0.06;
+          const rollDuration = 0.25;
 
-        rowData.forEach((d) => {
-          const { name, circle, nameLeft, nameWidth, circleW } = d;
-          const rowRight = nameLeft + nameWidth;
+          rowData.forEach((d, i) => {
+            const { name, circle, nameLeft, nameWidth, circleW } = d;
+            const rowRight = nameLeft + nameWidth;
 
-          if (p < enterStart) {
-            // Circles hidden
-            circle.style.opacity = 0;
-            name.style.clipPath = "none";
-          } else if (p < enterEnd) {
-            // All circles enter from right, converging to the same x (maxRight)
-            const ep = (p - enterStart) / (enterEnd - enterStart);
-            const startX = window.innerWidth + 100;
-            const currentX = startX + (maxRight - startX) * ep;
-            circle.style.transform = `translate(${currentX}px, -50%) rotate(${(1 - ep) * 540}deg)`;
-            circle.style.opacity = Math.min(ep * 3, 1);
-            name.style.clipPath = "none";
-          } else if (p < rollEnd) {
-            // All circles roll from right to left together (linear speed)
-            const rp = (p - rollStart) / (rollEnd - rollStart);
-            const endX = -circleW - 50;
-            const currentX = maxRight + (endX - maxRight) * rp;
-            const circleCenter = currentX + circleW / 2;
+            const rowStart = 0.05 + i * staggerGap;
+            const rowEnd = rowStart + rollDuration;
+            const fadeEnd = rowEnd + 0.05;
 
-            circle.style.transform = `translate(${currentX}px, -50%) rotate(${-rp * 720}deg)`;
-            circle.style.opacity = 1;
-
-            // Clip each text row as the circle passes over it
-            if (circleCenter > rowRight) {
+            if (p < rowStart) {
+              circle.style.opacity = 0;
+              circle.style.transform = `translate(${window.innerWidth + 50}px, -50%)`;
               name.style.clipPath = "none";
-            } else if (circleCenter > nameLeft) {
-              const hidden = (rowRight - circleCenter) / nameWidth;
-              name.style.clipPath = `inset(0 ${Math.min(hidden * 100, 100)}% 0 0)`;
+            } else if (p < rowEnd) {
+              const rp = (p - rowStart) / (rowEnd - rowStart);
+              const startX = window.innerWidth + 50;
+              const endX = -circleW - 50;
+              const currentX = startX + (endX - startX) * rp;
+              const circleCenter = currentX + circleW / 2;
+
+              circle.style.transform = `translate(${currentX}px, -50%) rotate(${-rp * 720}deg)`;
+              circle.style.opacity = 1;
+
+              if (circleCenter > rowRight) {
+                name.style.clipPath = "none";
+              } else if (circleCenter > nameLeft) {
+                const hidden = (rowRight - circleCenter) / nameWidth;
+                name.style.clipPath = `inset(0 ${Math.min(hidden * 100, 100)}% 0 0)`;
+              } else {
+                name.style.clipPath = `inset(0 100% 0 0)`;
+              }
+            } else if (p < fadeEnd) {
+              const fp = (p - rowEnd) / (fadeEnd - rowEnd);
+              circle.style.opacity = 1 - fp;
+              name.style.clipPath = `inset(0 100% 0 0)`;
             } else {
+              circle.style.opacity = 0;
               name.style.clipPath = `inset(0 100% 0 0)`;
             }
-          } else if (p < exitEnd) {
-            // Circles fade out
-            const exitP = (p - rollEnd) / (exitEnd - rollEnd);
-            circle.style.opacity = 1 - easeOut(exitP);
-            name.style.clipPath = `inset(0 100% 0 0)`;
-          } else {
-            circle.style.opacity = 0;
-            name.style.clipPath = `inset(0 100% 0 0)`;
-          }
-        });
+          });
+        } else {
+          // --- DESKTOP: ALL 3 CIRCLES COME TOGETHER & ROLL LEFT IN SYNC ---
+          const enterStart = 0.08;
+          const enterEnd = 0.20;
+          const rollStart = 0.20;
+          const rollEnd = 0.60;
+          const exitEnd = 0.70;
+
+          rowData.forEach((d) => {
+            const { name, circle, nameLeft, nameWidth, circleW } = d;
+            const rowRight = nameLeft + nameWidth;
+
+            if (p < enterStart) {
+              circle.style.opacity = 0;
+              name.style.clipPath = "none";
+            } else if (p < enterEnd) {
+              const ep = (p - enterStart) / (enterEnd - enterStart);
+              const startX = window.innerWidth + 100;
+              const currentX = startX + (maxRight - startX) * ep;
+              circle.style.transform = `translate(${currentX}px, -50%) rotate(${(1 - ep) * 540}deg)`;
+              circle.style.opacity = Math.min(ep * 3, 1);
+              name.style.clipPath = "none";
+            } else if (p < rollEnd) {
+              const rp = (p - rollStart) / (rollEnd - rollStart);
+              const endX = -circleW - 50;
+              const currentX = maxRight + (endX - maxRight) * rp;
+              const circleCenter = currentX + circleW / 2;
+
+              circle.style.transform = `translate(${currentX}px, -50%) rotate(${-rp * 720}deg)`;
+              circle.style.opacity = 1;
+
+              if (circleCenter > rowRight) {
+                name.style.clipPath = "none";
+              } else if (circleCenter > nameLeft) {
+                const hidden = (rowRight - circleCenter) / nameWidth;
+                name.style.clipPath = `inset(0 ${Math.min(hidden * 100, 100)}% 0 0)`;
+              } else {
+                name.style.clipPath = `inset(0 100% 0 0)`;
+              }
+            } else if (p < exitEnd) {
+              const exitP = (p - rollEnd) / (exitEnd - rollEnd);
+              circle.style.opacity = 1 - easeOut(exitP);
+              name.style.clipPath = `inset(0 100% 0 0)`;
+            } else {
+              circle.style.opacity = 0;
+              name.style.clipPath = `inset(0 100% 0 0)`;
+            }
+          });
+        }
 
         // --- PARTICLE IMAGE REVEAL starts during the roll ---
         const revealStart = 0.30;
@@ -422,21 +507,14 @@ const Clients = () => {
         <p className="sm caps mono">(Our Philosophy)</p>
       </div>
 
-      <div className="patron-names">
-        {items.map((item, i) => (
-          <div className="patron-row" key={i}>
-            <h1 className="patron-name">
-              {item.name.split("").map((char, j) => (
-                <span className="patron-char" key={j}>
-                  {char === " " ? "\u00A0" : char}
-                </span>
-              ))}
-            </h1>
-            <div className="patron-circle">
-              <img src={item.image} alt={item.name} loading="lazy" />
-            </div>
-          </div>
-        ))}
+      {/* Desktop: 3 items with = */}
+      <div className="patron-names patron-names-desktop">
+        {renderItems(desktopItems)}
+      </div>
+
+      {/* Mobile: 6 separate items */}
+      <div className="patron-names patron-names-mobile">
+        {renderItems(mobileItems)}
       </div>
 
       <div className="patron-subtitle">

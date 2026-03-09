@@ -34,3 +34,14 @@ a.link-light {
 .anime-link.anime-link-dark .anime-link-icon {
   background-color: var(--background);
 }
+
+@media (max-width: 480px) {
+  .anime-link-icon {
+    width: 3rem;
+    height: 1rem;
+  }
+
+  .anime-link {
+    gap: 0.35rem;
+  }
+}

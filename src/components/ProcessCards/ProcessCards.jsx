@@ -100,9 +100,11 @@ const ProcessCards = () => {
                 </div>
                 <div className="process-card-copy-description">
                   <p>{cardData.oneLiner}</p>
-                  <p className="sm" style={{ marginTop: "1rem", opacity: 0.6 }}>
-                    {cardData.description}
-                  </p>
+                  <div className="process-card-services">
+                    {cardData.description.split(" · ").map((service, i) => (
+                      <p className="sm" key={i}>{service}</p>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>

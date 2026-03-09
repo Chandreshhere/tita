@@ -25,13 +25,22 @@ const WhoWeAre = () => {
     const maxTranslateX = containerWidth - viewportWidth;
     const maxTranslateAtTarget = maxTranslateX;
 
-    const images = [
-      { id: "#whoweare-img-1", endTranslateX: -400 },
-      { id: "#whoweare-img-2", endTranslateX: -650 },
-      { id: "#whoweare-img-3", endTranslateX: -300 },
-      { id: "#whoweare-img-4", endTranslateX: -500 },
-      { id: "#whoweare-img-5", endTranslateX: -450 },
-    ];
+    const isMobile = window.innerWidth < 1000;
+    const images = isMobile
+      ? [
+          { id: "#whoweare-img-1", endTranslateX: -200 },
+          { id: "#whoweare-img-2", endTranslateX: -350 },
+          { id: "#whoweare-img-3", endTranslateX: -150 },
+          { id: "#whoweare-img-4", endTranslateX: -250 },
+          { id: "#whoweare-img-5", endTranslateX: -200 },
+        ]
+      : [
+          { id: "#whoweare-img-1", endTranslateX: -400 },
+          { id: "#whoweare-img-2", endTranslateX: -650 },
+          { id: "#whoweare-img-3", endTranslateX: -300 },
+          { id: "#whoweare-img-4", endTranslateX: -500 },
+          { id: "#whoweare-img-5", endTranslateX: -450 },
+        ];
 
     const imageEls = images.map((img) => section.querySelector(img.id));
 

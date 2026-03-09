@@ -70,9 +70,28 @@
   flex: 4;
 }
 
+.process-card-services {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 0.5em;
+  margin-top: 1rem;
+  opacity: 0.6;
+}
+
+.process-card-services p::after {
+  content: " ·";
+}
+
+.process-card-services p:last-child::after {
+  content: "";
+}
+
 @media (max-width: 1000px) {
   .process-card {
     gap: 0;
+    height: auto;
+    min-height: auto;
+    padding: 2rem 1.5rem;
   }
 
   .process-card,
@@ -81,14 +100,75 @@
   }
 
   .process-card-copy {
-    gap: 0.5rem;
+    gap: 1rem;
+  }
+
+  .process-card-services {
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-top: 1.5rem;
+  }
+
+  .process-card-services p::after {
+    content: "";
   }
 
   .process-card-index {
+    flex: 0 0 auto;
+    margin-bottom: 0.5rem;
+  }
+
+  .process-card-index h1 {
+    font-size: clamp(2.5rem, 1.5rem + 3vw, 5rem);
+  }
+
+  .process-card-content {
     flex: 1;
+    padding-top: 0.5rem;
   }
 
   .process-card-content-wrapper {
     width: 100%;
+    gap: 1.5rem;
+  }
+
+  .process-card-header {
+    width: 100%;
+    font-size: clamp(2.5rem, 1.5rem + 4vw, 5rem);
+  }
+
+  .process-card-img img {
+    aspect-ratio: 16/9;
+  }
+
+  .process-card-copy-description p {
+    font-size: clamp(1.1rem, 0.5rem + 2vw, 1.8rem);
+  }
+}
+
+@media (max-width: 480px) {
+  .process-card {
+    padding: 1.5rem 1rem;
+  }
+
+  .process-card-index h1 {
+    font-size: clamp(2rem, 1rem + 3vw, 3.5rem);
+  }
+
+  .process-card-header {
+    font-size: clamp(2rem, 1rem + 4vw, 3.5rem);
+  }
+
+  .process-card-content-wrapper {
+    gap: 1.2rem;
+  }
+
+  .process-card-copy-description p {
+    font-size: clamp(1rem, 0.5rem + 1.8vw, 1.5rem);
+  }
+
+  .process-card-services {
+    gap: 0.3rem;
+    margin-top: 1rem;
   }
 }

@@ -173,5 +173,46 @@
   .feather-modal {
     width: min(92vw, 500px);
     padding: clamp(1.5rem, 3vw, 2.5rem);
+    gap: 1.5rem;
+  }
+
+  .feather-modal-header h2 {
+    font-size: clamp(1.3rem, 0.8rem + 1.5vw, 2rem);
+  }
+
+  .feather-modal-link {
+    padding: 0.6rem 0;
+    gap: 0.75rem;
+  }
+
+  .feather-modal-link span.label {
+    min-width: 4rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .feather-modal {
+    width: min(95vw, 400px);
+    padding: clamp(1.2rem, 2.5vw, 2rem);
+    gap: 1.2rem;
+  }
+
+  .feather-modal-header h2 {
+    font-size: clamp(1.1rem, 0.7rem + 1.5vw, 1.6rem);
+  }
+
+  .feather-modal-close {
+    font-size: 1.2rem;
+    padding: 0.3rem;
+  }
+
+  .feather-modal-link {
+    padding: 0.5rem 0;
+    gap: 0.5rem;
+  }
+
+  .feather-modal-link span.label {
+    min-width: 3.5rem;
+    font-size: clamp(0.6rem, 0.4rem + 0.5vw, 0.75rem);
   }
 }

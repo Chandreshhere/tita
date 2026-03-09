@@ -111,8 +111,27 @@
 }
 
 @media (max-width: 1000px) {
+  .work {
+    flex-direction: column;
+    padding: 1rem;
+  }
+
+  .work-sidebar {
+    flex: 0;
+  }
+
+  .work-main {
+    flex: 1;
+    margin: 12svh 0 3svh 0;
+  }
+
+  .work-container {
+    margin-bottom: 4rem;
+  }
+
   .work-projects-container {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
   }
 
   .work-year {
@@ -124,5 +143,47 @@
   .year-indices {
     top: 12.5svh;
     gap: 0.5rem;
+  }
+
+  .work-project-img {
+    padding: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .work {
+    padding: 0.75rem;
+  }
+
+  .work-main {
+    margin: 10svh 0 2svh 0;
+  }
+
+  .work-container {
+    margin-bottom: 3rem;
+  }
+
+  .work-projects-container {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .work-project-img {
+    padding: 0.5rem;
+    aspect-ratio: 16/10;
+  }
+
+  .year-indices {
+    top: 10svh;
+    left: 0.75rem;
+    gap: 0.35rem;
+  }
+
+  .year-index.year-index-var-2 {
+    margin-left: 1rem;
+  }
+
+  .year-index.year-index-var-3 {
+    margin-left: 0.5rem;
   }
 }

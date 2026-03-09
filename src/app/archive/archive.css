@@ -67,3 +67,35 @@
 #drag-layer.active:active {
   cursor: grabbing;
 }
+
+@media (max-width: 1000px) {
+  .container {
+    width: 200vw;
+    height: 200vh;
+  }
+
+  .img {
+    width: calc((100% - 124px) / 30);
+  }
+
+  .gallery {
+    gap: 3px;
+    padding: 3px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    width: 250vw;
+    height: 250vh;
+  }
+
+  .img {
+    width: calc((100% - 64px) / 16);
+  }
+
+  .gallery {
+    gap: 2px;
+    padding: 2px;
+  }
+}
